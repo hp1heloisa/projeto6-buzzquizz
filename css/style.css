@@ -1,0 +1,70 @@
+.hidden {
+    display: none;
+}
+
+.screen2 {
+    margin-top:69px;
+}
+
+.header-screen2 {
+    width:100%;
+    height:227px;
+
+    background-image:linear-gradient(0deg,rgba(0,0,0,0.57),rgba(0, 0, 0, 0.57)), url(https://sm.ign.com/ign_br/gallery/h/hogwarts-l/hogwarts-legacy-harry-potter-movies-vs-game-comparison_bh6r.jpg);
+    background-position: right center;
+
+    position:relative;
+}
+
+.header-screen2 div {
+    width:1051px;
+    height:54px;
+
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-25%, -30%);
+}
+
+.header-screen2 div p {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 39px;
+    line-height: 46px;
+    color: #FFFFFF;
+}
+
+.container-questions {
+    width:100%;
+    height:1000px; /* COLOCAR HEIGHT AUTO APÓS OS TESTES*/
+    background-color:red;
+    margin-top: 42px;
+}
+
+.container-questions > div {
+    width:759px;
+    height:676px;
+    margin:0 auto;
+    padding: 30px;
+    background-color: yellow;
+}
+
+.question {
+    width:100%;
+    height:138px;
+    background-color:#434CA0;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.question div p {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 23px;
+    line-height: 27px;
+    color: #FFFFFF;
+}
