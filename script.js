@@ -15,7 +15,6 @@ function renderQuizzes(list){
         your.innerHTML += '<div class="titleYour"><span>Seus Quizzes</span> <ion-icon name="add-circle" onclick="createQuizz()"></ion-icon></div>';
         your.innerHTML += '<div class="allYourQuizzes"></div>';
         const addYour = document.querySelector('.allYourQuizzes');
-        console.log(list.data);
         list.data.forEach(element => {
             if (ownId == element.id){
                 addYour.innerHTML += `<div onclick="playQuizz()" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
@@ -26,7 +25,6 @@ function renderQuizzes(list){
         );
     }
     list.data.forEach(element => {
-        console.log(element);
         all.innerHTML += `<div class="caseQuizz" onclick="playQuizz()"> 
                                 <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
                                 <span>${element.title}</span>
@@ -47,14 +45,13 @@ function createQuizz(){
 let titleQuizz;
 let urlCaseQuizz;
 let level;
+let objectToPost = [];
 function nextQuestion(div){
     const dad = div.parentNode;
-    console.log(dad);
     titleQuizz =  dad.querySelector('.divFirstInputs :nth-child(1)');
     urlCaseQuizz =  dad.querySelector('.divFirstInputs :nth-child(2)');
     const numberQuestions =  dad.querySelector('.divFirstInputs :nth-child(3)');
     level =  dad.querySelector('.divFirstInputs :nth-child(4)');
-    console.log(titleQuizz.value);
     dad.innerHTML = '';
     dad.innerHTML += '<div class="titleThird">Crie suas perguntas</div>';
     dad.innerHTML += '<div class ="createDivs"></div>';
@@ -62,28 +59,28 @@ function nextQuestion(div){
     for (let i=0;i<numberQuestions.value;i++){
         dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate">
                                                                 <div class="screen3-1" onclick="each(this)"><span>Pergunta ${i+1}</span><ion-icon name="create-outline"></ion-icon></div>
-                                                                <div class="screen3-2 hidden" onclick="each(this)">
-                                                                    <span>Pergunta ${i+1}</span>
-                                                                    <div class="blockInputs">
+                                                                <div class="screen3-2 hidden">
+                                                                    <span onclick="each(this)">Pergunta ${i+1}</span>
+                                                                    <div class="blockInputs b1">
                                                                         <input type="text" placeholder="Texto da pergunta">
                                                                         <input type="text" placeholder="Cor de fundo da pergunta">
                                                                     </div>
                                                                     <span>Resposta correta</span>
-                                                                    <div class="blockInputs">
+                                                                    <div class="blockInputs b2">
                                                                         <input type="text" placeholder="Resposta correta">
                                                                         <input type="text" placeholder="URL da imagem">
                                                                     </div>
                                                                     <span>Respostas incorretas</span>
                                                                     <div class="allBlocks">
-                                                                        <div class="blockInputs">
+                                                                        <div class="blockInputs b3">
                                                                             <input type="text" placeholder="Resposta incorreta 1">
                                                                             <input type="text" placeholder="URL da imagem 1">
                                                                         </div>
-                                                                        <div class="blockInputs">
+                                                                        <div class="blockInputs b4">
                                                                             <input type="text" placeholder="Resposta incorreta 2">
                                                                             <input type="text" placeholder="URL da imagem 2">
                                                                         </div>
-                                                                        <div class="blockInputs">
+                                                                        <div class="blockInputs b5">
                                                                             <input type="text" placeholder="Resposta incorreta 3">
                                                                             <input type="text" placeholder="URL da imagem 3">
                                                                         </div>
@@ -92,17 +89,54 @@ function nextQuestion(div){
                                                         </div>`;
 
     }
-    const listQuestionScreen3 = dad.querySelector('.questionScreen3');
-    console.log(dad);
+    objectToPost = [
+        {title: titleQuizz.value, image: urlCaseQuizz.value, questions: [], levels: []}
+    ];
+    console.log(objectToPost);
 }
 
 function each(div){
     const dad = div.parentNode;
-    dad.querySelector('.screen3-1').classList.toggle('hidden');
-    dad.querySelector('.screen3-2').classList.toggle('hidden');
+    if (dad.classList.contains('screen3-2')==true){
+        dad.parentNode.querySelector('.screen3-1').classList.toggle('hidden');
+        dad.parentNode.querySelector('.screen3-2').classList.toggle('hidden');
+    } else{
+        dad.querySelector('.screen3-1').classList.toggle('hidden');
+        dad.querySelector('.screen3-2').classList.toggle('hidden');
+    }
 }
 function finalQuest(div){
     const dad = div.parentNode;
+    const listQuestions = dad.querySelectorAll('.eachCreate .screen3-2');
+    for (let i=0; i<listQuestions.length;i++){
+        objectToPost[0].questions.push({title: listQuestions[i].querySelector('.b1 :nth-child(1)').value,
+                                        color: listQuestions[i].querySelector('.b1 :nth-child(2)').value,
+                                        answers:[
+                                            {
+                                                text: listQuestions[i].querySelector('.b2 :nth-child(1)').value,
+                                                image:listQuestions[i].querySelector('.b2 :nth-child(2)').value,
+                                                isCorrectAnswer: true
+                                            },
+                                            {
+                                                text: listQuestions[i].querySelector('.b3 :nth-child(1)').value,
+                                                image: listQuestions[i].querySelector('.b3 :nth-child(2)').value,
+                                                isCorrectAnswer: false
+                                            },
+                                            {
+                                                text: listQuestions[i].querySelector('.b4 :nth-child(1)').value,
+                                                image: listQuestions[i].querySelector('.b4 :nth-child(2)').value,
+                                                isCorrectAnswer: false
+                                            },
+                                            {
+                                                text: listQuestions[i].querySelector('.b5 :nth-child(1)').value,
+                                                image: listQuestions[i].querySelector('.b5 :nth-child(2)').value,
+                                                isCorrectAnswer: false
+                                            }
+                                        ]
+                                    })
+                                        
+    }
+    console.log(objectToPost);
     dad.innerHTML = '';
     dad.innerHTML += '<div class="titleThird">Agora, decida os níveis</div>';
     dad.innerHTML += '<div class ="createDivs"></div>';
@@ -110,8 +144,8 @@ function finalQuest(div){
     for (let i=0;i<level.value;i++){
         dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate">
                                                                 <div class="screen3-1" onclick="each(this)"><span>Nível ${i+1}</span><ion-icon name="create-outline"></ion-icon></div>
-                                                                <div class="screen3-2 hidden" onclick="each(this)">
-                                                                    <span>Nível ${i+1}</span>
+                                                                <div class="screen3-2 hidden">
+                                                                    <span onclick="each(this)">Nível ${i+1}</span>
                                                                     <div class="blockInputs">
                                                                         <input type="text" placeholder="Título do nível">
                                                                         <input type="text" placeholder="% de acerto mínima">
@@ -125,9 +159,20 @@ function finalQuest(div){
 
 function finalQuizz(div){
     const dad = div.parentNode;
+    const listLevels = dad.querySelectorAll('.eachCreate .screen3-2');
+    for (let i=0; i<listLevels.length;i++){
+        objectToPost[0].levels.push({
+                                        title: listLevels[i].querySelector('.blockInputs :nth-child(1)').value,
+                                        image: listLevels[i].querySelector('.blockInputs :nth-child(3)').value,
+                                        text: listLevels[i].querySelector('.blockInputs :nth-child(4)').value,
+                                        minValue: listLevels[i].querySelector('.blockInputs :nth-child(2)').value
+                                    });
+                                        
+    }
+    console.log(objectToPost);
     dad.innerHTML = '';
     dad.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
-    dad.innerHTML += `<div class="caseQuizz3" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position:center; background-size:100%;">
+    dad.innerHTML += `<div class="caseQuizz3" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
                                 <span>${titleQuizz.value}</span>
                         </div>`;
     dad.innerHTML += '<div class="buttonEnd" onclick="acessQuizz(this)">Acessar Quizz</div>'
