@@ -18,11 +18,9 @@ function renderQuizzes(list){
         console.log(list.data);
         list.data.forEach(element => {
             if (ownId == element.id){
-                addYour.innerHTML += `<div class="caseQuizz" onclick="playQuizz()"> 
-                                            <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
+                addYour.innerHTML += `<div onclick="playQuizz()" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
                                                 <span>${element.title}</span>
-                                            </div>
-                                        </div>`
+                                            </div>`
             }
         }
         );
@@ -132,14 +130,14 @@ function finalQuizz(div){
     dad.innerHTML += `<div class="caseQuizz3" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position:center; background-size:100%;">
                                 <span>${titleQuizz.value}</span>
                         </div>`;
-    dad.innerHTML += '<div class="button3" onclick="acessQuizz(this)">Acessar Quizz</div>'
+    dad.innerHTML += '<div class="buttonEnd" onclick="acessQuizz(this)">Acessar Quizz</div>'
     dad.innerHTML += '<div class="backHome" onclick="backTo()">Voltar pra home</div>'
 }
 
 function acessQuizz(){
-
+    alert();
 }
 
 function backTo(){
-    
+    alert();
 }
