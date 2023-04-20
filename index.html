@@ -12,9 +12,8 @@
     <title>BuzzQuizz</title>
   </head>
   <body>
-
+    <div class="header">BuzzQuizz</div>
     <div class="screen1">
-      <div class="header-screen1">BuzzQuizz</div>
       <div class="yourQuizzes"></div>
       <div class="menuQuizzes">
         <div class="title">Todos os Quizzes</div>
@@ -33,6 +32,17 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="screen3 hidden">
+      <div class="titleThird">Comece pelo começo</div>
+      <div class="divFirstInputs">
+        <input type="text" placeholder="Título do seu quizz">
+        <input type="text" placeholder="URL da imagem do seu quizz">
+        <input type="text" placeholder="Quantidade de perguntas do quizz">
+        <input type="text" placeholder="Quantidade de níveis do quizz">
+      </div>
+      <div class="button3" onclick="nextQuestion(this)">Prosseguir pra criar perguntas</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
