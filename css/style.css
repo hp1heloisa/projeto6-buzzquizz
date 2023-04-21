@@ -175,7 +175,7 @@ body{
 .question {
     width:100%;
     height:138px;
-    background-color:#434CA0;
+    /*background-color:#434CA0;*/
 
     display:flex;
     justify-content:center;
@@ -237,7 +237,7 @@ body{
     color: #009C22;
 }
 
-.correct-answer p , .incorrect-answer > .clicked-answer p {
+.correct-answer p , .incorrect-answer > .clicked-answer p, .incorrect-answer >.wrong-answer p {
     color:#FF0B0B
 }
 
