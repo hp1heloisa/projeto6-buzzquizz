@@ -12,8 +12,16 @@
     <title>BuzzQuizz</title>
   </head>
   <body>
+    <div class="header">BuzzQuizz</div>
+    <div class="screen1">
+      <div class="yourQuizzes"></div>
+      <div class="menuQuizzes">
+        <div class="title">Todos os Quizzes</div>
+        <div class="allQuizzes"></div>
+      </div>
+    </div>
 
-    <div class="screen2">
+    <div class="screen2 hidden">
       <div class="header-screen2" style="background-image:linear-gradient(0deg,rgba(0,0,0,0.57),rgba(0, 0, 0, 0.57)), url(https://sm.ign.com/ign_br/gallery/h/hogwarts-l/hogwarts-legacy-harry-potter-movies-vs-game-comparison_bh6r.jpg); background-position: right center;">
         <div><p>O quão Potterhead é você?</p></div>
       </div>
@@ -59,6 +67,17 @@
           <p>Voltar para home</p>
         </div>
       </div>
+    </div>
+
+    <div class="screen3 hidden">
+      <div class="titleThird">Comece pelo começo</div>
+      <div class="divFirstInputs">
+        <input type="text" placeholder="Título do seu quizz">
+        <input type="text" placeholder="URL da imagem do seu quizz">
+        <input type="text" placeholder="Quantidade de perguntas do quizz">
+        <input type="text" placeholder="Quantidade de níveis do quizz">
+      </div>
+      <div class="button3" onclick="nextQuestion(this)">Prosseguir pra criar perguntas</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
