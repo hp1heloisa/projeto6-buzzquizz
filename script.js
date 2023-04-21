@@ -4,6 +4,7 @@ promiseQuizzes.then(renderQuizzes);
 promiseQuizzes.catch(alert);
 
 function renderQuizzes(list){
+    console.log(list);
     const all = document.querySelector('.allQuizzes');
     const your = document.querySelector('.yourQuizzes');
     const ownId = localStorage.getItem("id");
@@ -27,7 +28,7 @@ function renderQuizzes(list){
     list.data.forEach(element => {
         all.innerHTML += `<div class="caseQuizz" onclick="playQuizz()"> 
                                 <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
-                                <span>${element.title}</span>
+                                <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
                                 </div>
                          </div>`
     });
@@ -190,6 +191,6 @@ function acessQuizz(){
 }
 
 function backTo(){
-    alert();
+    window.location.reload();
 }
 
