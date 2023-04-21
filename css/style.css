@@ -139,26 +139,19 @@ body{
     background-image:linear-gradient(0deg,rgba(0,0,0,0.57),rgba(0, 0, 0, 0.57)), url(https://sm.ign.com/ign_br/gallery/h/hogwarts-l/hogwarts-legacy-harry-potter-movies-vs-game-comparison_bh6r.jpg);
     background-position: right center;
 
-    position:relative;
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.header-screen2 div {
-    width:1051px;
-    height:54px;
-
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-25%, -30%);
-}
-
-.header-screen2 div p {
+.header-screen2 p {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 39px;
     line-height: 46px;
     color: #FFFFFF;
+    text-align:center;
 }
 
 .container-screen2 {
@@ -201,6 +194,7 @@ body{
 .container-answers {
     width:100%;
     height:508px;
+    margin-top:24px;
 
     display:flex;
     justify-content:space-between;
@@ -211,7 +205,7 @@ body{
 .answer {
     width:48%;
     height:48%;
-    cursor:pointer;/*?*/
+    cursor:pointer;
 
     display:flex;
     flex-direction:column;
@@ -229,6 +223,30 @@ body{
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
+}
+
+.correct-answer div {
+    opacity:0.3;
+}
+
+.correct-answer > .right-answer { /*Classes para colocar na função da resposta*/
+    opacity:1;
+}
+
+.correct-answer > .right-answer p , .incorrect-answer > .right-answer p {
+    color: #009C22;
+}
+
+.correct-answer p , .incorrect-answer > .clicked-answer p {
+    color:#FF0B0B
+}
+
+.incorrect-answer div {
+    opacity:0.3;
+}
+
+.incorrect-answer > .clicked-answer {
+    opacity:1;
 }
 
 .quizz-end {
@@ -552,6 +570,37 @@ input::placeholder{
     }
     .titleThird{
         margin-top: 37px;
+    }
+    .header-screen2 p{
+        font-size: 19px;
+    }
+    .container-question, .question, .quizz-end{
+        width:100%;
+    }
+    .question div p{
+        font-size:19px;
+        text-align: center;
+    }
+    .container-answers {
+        gap:12px;
+    }
+    .header-quizz-end p{
+        text-align: center;
+    }
+    .body-end {
+        flex-direction: column;
+        justify-content:flex-start;
+        gap:10px;
+    }
+    .body-end img {
+        height:50%;
+    }
+    .body-end div p {
+        font-size:17px;
+        text-align:left;
+    }
+    .buttons-screen2 {
+        margin-top:120px;
     }
 
 }
