@@ -4,7 +4,7 @@ promiseQuizzes.then(renderQuizzes);
 promiseQuizzes.catch(alert);
 
 let cont,right = 0;
-let objLevels, idQuiz, titleColor;
+let objLevels, idQuiz;
 
 function renderQuizzes(list){
     //console.log(list);
@@ -37,24 +37,17 @@ function renderQuizzes(list){
     });
 }
 
-/*function scrollNextQuestion(clickedDiv) { //Deu ruimmmmmmmmmmmmmmmmmmmmmm
+function scrollNextQuestion(clickedDiv) { //Deu ruimmmmmmmmmmmmmmmmmmmmmm
+
     console.log(clickedDiv)
-    clickedDiv.addEventListener('click', () => {
-        const questions = Array.from(document.querySelectorAll('.container-question'));
-        console.log(questions)
-        const nextQuestion = questions.find( question => {
-            if(!question.classList.contains('correct-answer') || !question.classList.contains('incorrect-answer')){
-                return true;
-            }
-        })
-        console.log(nextQuestion);
-        const positionScroll = nextQuestion.offsetTop;
-        window.scrollTo({
-            top: positionScroll,
-            behavior:'smooth'
-        })
-    })
-}*/
+    const listAnswers = document.querySelectorAll('.container-answers');
+    for(let i = 0; i<listAnswers.length; i++){
+        if(listAnswers[i].classList.contains('correct-answer') || listAnswers[i].classList.contains('incorrect-answer')){
+            console.log(listAnswers[i+1].parentNode)
+            listAnswers[i+1].parentNode.scrollIntoView({behavior:"smooth"});
+        }
+    }
+}
 
 function playAgain(){
 
@@ -70,6 +63,8 @@ function playAgain(){
 function showEndQuiz(){
     document.querySelector('.buttons-screen2').classList.remove('hidden');
     document.querySelector('.quizz-end').classList.remove('hidden')
+
+    document.querySelector('.buttons-screen2').scrollIntoView({behavior:"smooth"});
 }
 
 function isFinished(){
@@ -134,7 +129,7 @@ function verifyAnswer(clicked){
             }
         })
     }
-    //setTimeout(scrollNextQuestion,2000,clickedNode.parentNode);
+    setTimeout(scrollNextQuestion,2000,clickedNode);
     isFinished();
 }
 
@@ -142,8 +137,9 @@ function renderQuestion(question){
     const questionAnswers = question.answers;
     question.answers.sort(() => Math.random()-0.5)
     const containerScreen2 = document.querySelector('.container-screen2');
+    
     containerScreen2.innerHTML +=   `<div class="container-question">
-                                        <div class="question" style="background-color:${titleColor}">
+                                        <div class="question" style="background-color:${question.color}">
                                             <div>
                                                 <p>${question.title}</p>
                                             </div>
@@ -173,14 +169,13 @@ function renderQuestion(question){
 function renderSelectedQuiz(response){
     console.log(response);
     const headerScreen2 = document.querySelector('.header-screen2');
-    headerScreen2.style.backgroundImage = `url(${response.data.image})`;
+    headerScreen2.style.backgroundImage = `linear-gradient(0deg, rgba(0, 0, 0, 0.57), rgba(0, 0, 0, 0.57)), url(${response.data.image})`;
 
     const titleScreen2 = headerScreen2.querySelector('p');
     titleScreen2.innerHTML = `${response.data.title}`; //problema com a cor do titulo
 
     const question = response.data.questions;
     objLevels = response.data.levels;
-    titleColor = response.data.title;
 
     question.forEach(renderQuestion);
 }
