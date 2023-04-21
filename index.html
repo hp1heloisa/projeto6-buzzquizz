@@ -33,75 +33,52 @@
               rgba(0, 0, 0, 0.57),
               rgba(0, 0, 0, 0.57)
             ),
-            url(https://sm.ign.com/ign_br/gallery/h/hogwarts-l/hogwarts-legacy-harry-potter-movies-vs-game-comparison_bh6r.jpg);
+            url(${urlHeader});
           background-position: right center;
         "
       >
-        <p>O quão Potterhead é você?</p>
+        <p>${titleHeader}</p>
       </div>
       <div class="container-screen2">
         <div class="container-question">
           <!-- CADA PERGUNTA DO QUIZZ -->
           <div class="question">
             <div>
-              <p>Em qual animal Olho-Tonto Moody transfigurou Malfoy?</p>
+              <p>${titleQuestion}</p>
             </div>
           </div>
           <div class="container-answers">
             <div class="answer">
               <img
-                src="https://static.vecteezy.com/ti/fotos-gratis/p3/2098203-gato-malhado-prateado-sentado-no-fundo-verde-gratis-foto.jpg"
+                src=${urlAnswer}
                 alt="resposta"
               />
-              <p>Gatíneo</p>
-            </div>
-            <div class="answer">
-              <img
-                src="https://static.vecteezy.com/ti/fotos-gratis/p3/2098203-gato-malhado-prateado-sentado-no-fundo-verde-gratis-foto.jpg"
-                alt="resposta"
-              />
-              <p>Gatíneo</p>
-            </div>
-            <div class="answer">
-              <img
-                src="https://static.vecteezy.com/ti/fotos-gratis/p3/2098203-gato-malhado-prateado-sentado-no-fundo-verde-gratis-foto.jpg"
-                alt="resposta"
-              />
-              <p>Gatíneo</p>
-            </div>
-            <div class="answer">
-              <img
-                src="https://static.vecteezy.com/ti/fotos-gratis/p3/2098203-gato-malhado-prateado-sentado-no-fundo-verde-gratis-foto.jpg"
-                alt="resposta"
-              />
-              <p>Gatíneo</p>
+              <p>${textAnswer}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="quizz-end">
         <div class="header-quizz-end">
-          <p>88% de acerto: Você é praticamente um aluno de Hogwarts!</p>
+          <p>${hitPercentage} de acerto: ${textLevel}</p>
         </div>
         <div class="body-end">
           <img
-            src="https://labdicasjornalismo.com/images/noticias/2932/2932_24042020120935.jpg"
+            src=${urlEndQuiz}
             alt="resposta quiz"
           />
           <div>
             <p>
-              Parabéns Potterhead! Bem-vindx a Hogwarts, aproveite o loop
-              infinito de comida e clique no botão abaixo para usar o vira-tempo
-              e reiniciar este teste.
+              ${textEndQuiz}
             </p>
           </div>
         </div>
       </div>
       <div class="buttons-screen2">
-        <div class="button-play-again">
+        <div class="button-play-again" onclick="playAgain()">
           <p>Reiniciar Quizz</p>
         </div>
-        <div class="button-back-home">
+        <div class="button-back-home" onclick="reload()">
           <p>Voltar para home</p>
         </div>
       </div>

@@ -33,8 +33,14 @@ function renderQuizzes(list){
     });
 }
 function playQuizz(){
-    alert();
+    const screen1 = document.querySelector('.screen1');
+    const screen2 = document.querySelector('.screen2');
+    screen1.classList.add('hidden');
+    screen2.classList.remove('hidden');
 }
+
+
+
 function createQuizz(){
     const screen1 = document.querySelector('.screen1');
     const screen3 = document.querySelector('.screen3');
@@ -186,3 +192,4 @@ function acessQuizz(){
 function backTo(){
     alert();
 }
+
