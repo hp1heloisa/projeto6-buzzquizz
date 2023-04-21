@@ -163,7 +163,7 @@ body{
 
 .container-screen2 {
     width:100%;
-    height:auto; /* COLOCAR HEIGHT AUTO APÓS OS TESTES*/
+    height:auto;
 
     margin: 42px 0;
 }
@@ -336,4 +336,222 @@ body{
     font-size: 21px;
     line-height: 25px;
     color:#818181;
+}
+
+/*TELA 3 basico*/
+.screen3{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.titleThird{
+    font-weight: 700;
+    font-size: 23px;
+    line-height: 27px;
+    color: #000000;
+    margin-top: 71px;
+}
+.divFirstInputs{
+    margin-top: 27px;
+    margin-bottom: 85px;
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+    gap: 9px;
+    padding: 16px;
+}
+input{
+    width: 564px;
+    height: 46px;
+    background: #FFFFFF;
+    border: 1px solid #D1D1D1;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 22px;
+    padding-left: 23px;
+}
+input::placeholder{
+    font-style: italic;
+    color: #BABABA;
+}
+.button3{
+    width: 368.86px;
+    height: 54px;
+    background: #EC362D;
+    border-radius: 15px;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF5F4;
+}
+
+/*TELA 3 PERGUNTAS*/
+.createDivs{
+    margin-top: 36px;
+    margin-bottom: 81px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 601px;
+
+}
+.screen3-1{
+    height: 74px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 24px;
+}
+.createDivs span{
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+    margin-left: 4%;
+    color: #000000;
+}
+.screen3-1 ion-icon{
+    width: 26px;
+    height: 23px;
+}
+.screen3-2{
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 27px;
+}
+.screen3-2 span{
+    margin-top: 28px;
+    margin-bottom: 14px;
+}
+.allBlocks{
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+.blockInputs{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px
+}
+
+.caseQuizz3{
+    width: 500px;
+    height: 266px;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 23px;
+    line-height: 27px;
+    display: flex;
+    justify-content: start;
+    color: #FFFFFF;
+    align-items: end;
+    padding-left: 17px;
+    margin-top: 46px;
+    margin-bottom: 45px;
+}
+.caseQuizz3 span{
+    margin-bottom: 11px;
+}
+
+.backHome{
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 25px;
+    color: #818181;
+    margin-top: 22px;
+}
+.buttonEnd{
+    width: 368.86px;
+    height: 44px;
+    background: #EC362D;
+    border-radius: 15px;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF5F4;
+}
+
+.hidden{
+    display: none;
+}
+/*RESPONSIVIDADE*/
+@media (max-width:1100px){
+    .allQuizzes{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }   
+    .imgCase{
+        width: 310px;
+    }
+    .allYourQuizzes{
+        display: flex;
+        flex-direction: column;
+    }
+    .divCreate{
+        margin-top: 107px;
+        margin-bottom: 35px;
+    }
+    .yourQuizzes{
+        margin-top: 107px;
+        margin-bottom: 38px;
+    }
+    .titleYour{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    ion-icon{
+        margin: none;
+    }
+    .divFirstInputs{
+        width: 100%;
+        align-items: center;
+        margin-bottom: 29px;
+    }
+    input{
+        width: 91%;
+        padding-left: 10px;
+    }
+    .button3{
+        width: 86%;
+        font-size: 18px;
+    }
+    .createDivs{
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    .createDivs span{
+        margin-left: 5%;
+    }
+    .caseQuizz3{
+        width: 91%;
+        margin-bottom: 24px;
+        margin-top: 29px;
+    }
+    .buttonEnd{
+        width: 59%;
+        font-size: 18px;
+    }
+    .backHome{
+        font-size: 18px;
+    }
+    .titleThird{
+        margin-top: 37px;
+    }
+
 }
