@@ -28,57 +28,34 @@
       <div
         class="header-screen2"
         style="
-          background-image: linear-gradient(
-              0deg,
-              rgba(0, 0, 0, 0.57),
-              rgba(0, 0, 0, 0.57)
-            ),
-            url(${urlHeader});
           background-position: right center;
         "
       >
-        <p>${titleHeader}</p>
+        <p></p>
       </div>
       <div class="container-screen2">
-        <div class="container-question">
-          <!-- CADA PERGUNTA DO QUIZZ -->
-          <div class="question">
-            <div>
-              <p>${titleQuestion}</p>
-            </div>
-          </div>
-          <div class="container-answers">
-            <div class="answer">
-              <img
-                src=${urlAnswer}
-                alt="resposta"
-              />
-              <p>${textAnswer}</p>
-            </div>
-          </div>
-        </div>
+        
       </div>
-      <div class="quizz-end">
+      <div class="quizz-end hidden">
         <div class="header-quizz-end">
-          <p>${hitPercentage} de acerto: ${textLevel}</p>
+          <p></p>
         </div>
         <div class="body-end">
           <img
-            src=${urlEndQuiz}
+            src=;
             alt="resposta quiz"
           />
           <div>
             <p>
-              ${textEndQuiz}
             </p>
           </div>
         </div>
       </div>
-      <div class="buttons-screen2">
-        <div class="button-play-again" onclick="playAgain()">
+      <div class="buttons-screen2 hidden">
+        <div class="button-play-again" onclick="playAgain(this)">
           <p>Reiniciar Quizz</p>
         </div>
-        <div class="button-back-home" onclick="reload()">
+        <div class="button-back-home" onclick="backTo()">
           <p>Voltar para home</p>
         </div>
       </div>
