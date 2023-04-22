@@ -7,37 +7,44 @@ let cont,right = 0;
 let objLevels, idQuiz;
 
 function renderQuizzes(list){
-    //console.log(list);
+    console.log(list);
     const all = document.querySelector('.allQuizzes');
     const your = document.querySelector('.yourQuizzes');
-    const ownId = localStorage.getItem("id");
-    if (ownId == undefined){
-        your.classList.add('divCreate');
-        your.innerHTML += '<div class="textYour">Você não criou nenhum quizz ainda :(</div>';
-        your.innerHTML += '<div class="create" onclick="createQuizz()">Criar Quizz</div>';
-    } else{
-        your.innerHTML += '<div class="titleYour"><span>Seus Quizzes</span> <ion-icon name="add-circle" onclick="createQuizz()"></ion-icon></div>';
-        your.innerHTML += '<div class="allYourQuizzes"></div>';
-        const addYour = document.querySelector('.allYourQuizzes');
-        list.data.forEach(element => {
-            if (ownId == element.id){
-                addYour.innerHTML += `<div onclick="playQuizz()" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
-                                                <span>${element.title}</span>
-                                            </div>`
+    const ownDatas = JSON.parse(localStorage.getItem("dataRecived"));
+    console.log(localStorage.getItem("dataRecived"));
+    let own;
+    for (let j=0;j<ownDatas.length;j++){
+        if (ownDatas == null){
+            your.classList.add('divCreate');
+            your.innerHTML += '<div class="textYour">Você não criou nenhum quizz ainda :(</div>';
+            your.innerHTML += '<div class="create" onclick="createQuizz()">Criar Quizz</div>';
+        } else{
+            if (j==0) { 
+                your.innerHTML += '<div class="titleYour"><span>Seus Quizzes</span> <ion-icon name="add-circle" onclick="createQuizz()"></ion-icon></div>';
+                your.innerHTML += '<div class="allYourQuizzes"></div>';
             }
+            const addYour = document.querySelector('.allYourQuizzes');
+            list.data.forEach(element => {
+                if (ownDatas[j].id == element.id){
+                    addYour.innerHTML += `<div onclick="playQuizz()" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
+                                                <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
+                                            </div>`
+                }
+            }
+            );
         }
-        );
-    }
-    list.data.forEach(element => {
-        all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)"> 
+        list.data.forEach(element => {
+            all.innerHTML += `<div class="caseQuizz" onclick="playQuizz()"> 
                                 <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
                                 <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
                                 </div>
                          </div>`
     });
 }
+}
 
 function scrollNextQuestion(clickedDiv) {
+
     console.log(clickedDiv)
     const listAnswers = document.querySelectorAll('.container-answers');
     for(let i = 0; i<listAnswers.length; i++){
@@ -202,6 +209,8 @@ function playQuizz(selected){
     promise.catch(error);
 }
 
+
+
 function createQuizz(){
     const screen1 = document.querySelector('.screen1');
     const screen3 = document.querySelector('.screen3');
@@ -256,10 +265,8 @@ function nextQuestion(div){
                                                         </div>`;
 
     }
-    objectToPost = [
-        {title: titleQuizz.value, image: urlCaseQuizz.value, questions: [], levels: []}
-    ];
-    //console.log(objectToPost);
+    objectToPost = {title: titleQuizz.value, image: urlCaseQuizz.value, questions: [], levels: []};
+    console.log(objectToPost);
 }
 
 function each(div){
@@ -276,9 +283,9 @@ function finalQuest(div){
     const dad = div.parentNode;
     const listQuestions = dad.querySelectorAll('.eachCreate .screen3-2');
     for (let i=0; i<listQuestions.length;i++){
-        objectToPost[0].questions.push({title: listQuestions[i].querySelector('.b1 :nth-child(1)').value,
-                                        color: listQuestions[i].querySelector('.b1 :nth-child(2)').value,
-                                        answers:[
+        objectToPost.questions.push({title: listQuestions[i].querySelector('.b1 :nth-child(1)').value,
+                                    color: listQuestions[i].querySelector('.b1 :nth-child(2)').value,
+                                    answers:[
                                             {
                                                 text: listQuestions[i].querySelector('.b2 :nth-child(1)').value,
                                                 image:listQuestions[i].querySelector('.b2 :nth-child(2)').value,
@@ -288,22 +295,25 @@ function finalQuest(div){
                                                 text: listQuestions[i].querySelector('.b3 :nth-child(1)').value,
                                                 image: listQuestions[i].querySelector('.b3 :nth-child(2)').value,
                                                 isCorrectAnswer: false
-                                            },
-                                            {
-                                                text: listQuestions[i].querySelector('.b4 :nth-child(1)').value,
-                                                image: listQuestions[i].querySelector('.b4 :nth-child(2)').value,
-                                                isCorrectAnswer: false
-                                            },
-                                            {
-                                                text: listQuestions[i].querySelector('.b5 :nth-child(1)').value,
-                                                image: listQuestions[i].querySelector('.b5 :nth-child(2)').value,
-                                                isCorrectAnswer: false
                                             }
                                         ]
                                     })
-                                        
-    }
-    //console.log(objectToPost);
+        if (listQuestions[i].querySelector('.b4 :nth-child(1)').value!="" && listQuestions[i].querySelector('.b4 :nth-child(2)').value!=""){
+            objectToPost.questions[i].answers.push({
+                text: listQuestions[i].querySelector('.b4 :nth-child(1)').value,
+                image: listQuestions[i].querySelector('.b4 :nth-child(2)').value,
+                isCorrectAnswer: false
+            });
+        };
+        if (listQuestions[i].querySelector('.b5 :nth-child(1)').value!="" && listQuestions[i].querySelector('.b5 :nth-child(2)').value!=""){
+            objectToPost.questions[i].answers.push({
+                text: listQuestions[i].querySelector('.b5 :nth-child(1)').value,
+                image: listQuestions[i].querySelector('.b5 :nth-child(2)').value,
+                isCorrectAnswer: false
+            });
+        };                              
+    };
+    console.log(objectToPost);
     dad.innerHTML = '';
     dad.innerHTML += '<div class="titleThird">Agora, decida os níveis</div>';
     dad.innerHTML += '<div class ="createDivs"></div>';
@@ -323,12 +333,12 @@ function finalQuest(div){
                                                         </div>`;
     }
 }
-
+let listSendStorage = {id:"",key:""};
 function finalQuizz(div){
     const dad = div.parentNode;
     const listLevels = dad.querySelectorAll('.eachCreate .screen3-2');
     for (let i=0; i<listLevels.length;i++){
-        objectToPost[0].levels.push({
+        objectToPost.levels.push({
                                         title: listLevels[i].querySelector('.blockInputs :nth-child(1)').value,
                                         image: listLevels[i].querySelector('.blockInputs :nth-child(3)').value,
                                         text: listLevels[i].querySelector('.blockInputs :nth-child(4)').value,
@@ -336,7 +346,24 @@ function finalQuizz(div){
                                     });
                                         
     }
-    //console.log(objectToPost);
+    console.log(objectToPost);
+    let datasToSend;
+    let promisePost = axios.post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes",objectToPost);
+    promisePost.then(element => {
+        console.log('deu bom');
+        listSendStorage.id = element.data.id;
+        listSendStorage.key = element.data.key;
+        if (localStorage.getItem("dataRecived") != null){
+            let teste = JSON.parse(localStorage.getItem("dataRecived"));
+            teste.push(listSendStorage);
+            datasToSend = JSON.stringify(teste);
+            localStorage.setItem("dataRecived", datasToSend);
+        } else{
+            datasToSend = JSON.stringify([listSendStorage]);
+            localStorage.setItem("dataRecived", datasToSend);
+        }
+    });
+    promisePost.catch(alert);
     dad.innerHTML = '';
     dad.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
     dad.innerHTML += `<div class="caseQuizz3" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
@@ -353,4 +380,3 @@ function acessQuizz(){
 function backTo(){
     window.location.reload();
 }
-
