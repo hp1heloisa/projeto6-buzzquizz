@@ -12,12 +12,13 @@ function addScreen1() {
 
 let cont,right = 0;
 let objLevels, idQuiz;
-
+let ownDatas = JSON.parse(localStorage.getItem("dataRecived"));
+console.log(ownDatas);
+let aux = 0;
 function renderQuizzes(list){
     console.log(list);
     const all = document.querySelector('.allQuizzes');
     const your = document.querySelector('.yourQuizzes');
-    const ownDatas = JSON.parse(localStorage.getItem("dataRecived"));
     console.log(localStorage.getItem("dataRecived"));
     if (ownDatas == null){
             your.classList.add('divCreate');
@@ -31,52 +32,65 @@ function renderQuizzes(list){
                              </div>`
         });
         } else{
-    for (let j=0;j<ownDatas.length;j++){
-        
-            if (j==0) { 
-                your.innerHTML += '<div class="titleYour"><span>Seus Quizzes</span> <ion-icon name="add-circle" onclick="createQuizz()"></ion-icon></div>';
-                your.innerHTML += '<div class="allYourQuizzes"></div>';
-            }
-            const addYour = document.querySelector('.allYourQuizzes');
-            list.data.forEach(element => {
-                if (ownDatas[j].id == element.id){
-                    addYour.innerHTML += `<div onclick="playQuizz(this)" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
-                                                <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
-                                                <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)"></ion-icon> </div>                                            </div>`
+            for (let j=0;j<ownDatas.length;j++){
+                if (j==0) { 
+                    your.innerHTML += '<div class="titleYour"><span>Seus Quizzes</span> <ion-icon name="add-circle" onclick="createQuizz()"></ion-icon></div>';
+                    your.innerHTML += '<div class="allYourQuizzes"></div>';
                 }
+                const addYour = document.querySelector('.allYourQuizzes');
+                list.data.forEach(element => {
+                    if (ownDatas[j].id == element.id){
+                        aux++;
+                        addYour.innerHTML += `<div onclick="playQuizz(this)" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
+                                                    <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
+                                                    <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)"></ion-icon> </div>                                           
+                                                </div>`
+                    }
+                }
+                );
+                list.data.forEach(element => {
+                all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)"> 
+                                    <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
+                                        <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
+                                    </div>
+                                </div>`
+                });
             }
-            );
-        list.data.forEach(element => {
-            all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)"> 
-                                <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
-                                <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
-                                </div>
-                         </div>`
-    });
-}}
+            if (aux == 0){ 
+                your.classList.add('divCreate');
+                your.innerHTML = '';
+                your.innerHTML += '<div class="textYour">Você não criou nenhum quizz ainda :(</div>';
+                your.innerHTML += '<div class="create" onclick="createQuizz()">Criar Quizz</div>';
+            };
+        }
 }
 
 function editQuiz(selected){
 
 }
-
-let userSecretKey = JSON.parse(localStorage.getItem("UniqueKey"));
-
 function deleteQuiz(selected){
     const dadDiv = selected.parentNode.parentNode;
-
     const idDelete = dadDiv.querySelector('.idImagem').textContent;
-
-    const linkDelete = `https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idDelete}`
-
-    let objDelete = {
-        headers: {"Secret-Key" : userSecretKey }
+    let keyDelete;
+    let ownDatasNew = [];
+    for (let i=0; i<ownDatas.length; i++){
+        console.log(keyDelete);
+        if (idDelete == ownDatas[i].id){
+            keyDelete = ownDatas[i].key;
+        } else{
+            ownDatasNew.push(ownDatas[i]);
+        }
     }
-
+    const linkDelete = `https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idDelete}`
+    let objDelete = {headers: {'Secret-Key': keyDelete }};
     const conf = confirm("Tem certeza que deseja excluir este Quiz?");
     if (conf){
         const promise = axios.delete(linkDelete, objDelete);
-        promise.then(backTo);
+        promise.then(element => {
+            localStorage.setItem("dataRecived", JSON.stringify(ownDatasNew));
+            window.location.reload();
+        }
+        );
         promise.catch(error);
     }
 }
