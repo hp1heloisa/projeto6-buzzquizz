@@ -3,8 +3,11 @@ let promiseQuizzes = axios.get("https://mock-api.driven.com.br/api/vm/buzzquizz/
 promiseQuizzes.then(renderQuizzes);
 promiseQuizzes.catch(alert);
 
+let cont,right = 0;
+let objLevels, idQuiz;
+
 function renderQuizzes(list){
-    console.log(list);
+    //console.log(list);
     const all = document.querySelector('.allQuizzes');
     const your = document.querySelector('.yourQuizzes');
     const ownDatas = JSON.parse(localStorage.getItem("dataRecived"));
@@ -26,18 +29,17 @@ function renderQuizzes(list){
                     addYour.innerHTML += `<div onclick="playQuizz()" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
                                                 <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
                                             </div>`
-                }
             }
-            );
         }
-        list.data.forEach(element => {
-            all.innerHTML += `<div class="caseQuizz" onclick="playQuizz()"> 
+        );
+    }
+    list.data.forEach(element => {
+        all.innerHTML += `<div class="caseQuizz" onclick="playQuizz()"> 
                                 <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
                                 <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
                                 </div>
-                            </div>`
-        });
-    }
+                         </div>`
+    });
 }
 function playQuizz(){
     const screen1 = document.querySelector('.screen1');
@@ -46,7 +48,16 @@ function playQuizz(){
     screen2.classList.remove('hidden');
 }
 
+function playQuizz(selected){
+    changeScreen1To2();
 
+    idQuiz = selected.querySelector('.idImagem').textContent;
+    console.log(idQuiz);
+
+    const promise = axios.get(`https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idQuiz}`);
+    promise.then(renderSelectedQuiz);
+    promise.catch(error);
+}
 
 function createQuizz(){
     const screen1 = document.querySelector('.screen1');
@@ -102,7 +113,9 @@ function nextQuestion(div){
                                                         </div>`;
 
     }
-    objectToPost = {title: titleQuizz.value, image: urlCaseQuizz.value, questions: [], levels: []};
+    objectToPost = [
+        {title: titleQuizz.value, image: urlCaseQuizz.value, questions: [], levels: []}
+    ];
     console.log(objectToPost);
 }
 
@@ -135,21 +148,8 @@ function finalQuest(div){
                                             }
                                         ]
                                     })
-        if (listQuestions[i].querySelector('.b4 :nth-child(1)').value!="" && listQuestions[i].querySelector('.b4 :nth-child(2)').value!=""){
-            objectToPost.questions[i].answers.push({
-                text: listQuestions[i].querySelector('.b4 :nth-child(1)').value,
-                image: listQuestions[i].querySelector('.b4 :nth-child(2)').value,
-                isCorrectAnswer: false
-            });
-        };
-        if (listQuestions[i].querySelector('.b5 :nth-child(1)').value!="" && listQuestions[i].querySelector('.b5 :nth-child(2)').value!=""){
-            objectToPost.questions[i].answers.push({
-                text: listQuestions[i].querySelector('.b5 :nth-child(1)').value,
-                image: listQuestions[i].querySelector('.b5 :nth-child(2)').value,
-                isCorrectAnswer: false
-            });
-        };                              
-    };
+                                        
+    }
     console.log(objectToPost);
     dad.innerHTML = '';
     dad.innerHTML += '<div class="titleThird">Agora, decida os níveis</div>';
@@ -184,23 +184,6 @@ function finalQuizz(div){
                                         
     }
     console.log(objectToPost);
-    let datasToSend;
-    let promisePost = axios.post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes",objectToPost);
-    promisePost.then(element => {
-        console.log('deu bom');
-        listSendStorage.id = element.data.id;
-        listSendStorage.key = element.data.key;
-        if (localStorage.getItem("dataRecived") != null){
-            let teste = JSON.parse(localStorage.getItem("dataRecived"));
-            teste.push(listSendStorage);
-            datasToSend = JSON.stringify(teste);
-            localStorage.setItem("dataRecived", datasToSend);
-        } else{
-            datasToSend = JSON.stringify([listSendStorage]);
-            localStorage.setItem("dataRecived", datasToSend);
-        }
-    });
-    promisePost.catch(alert);
     dad.innerHTML = '';
     dad.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
     dad.innerHTML += `<div class="caseQuizz3" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
@@ -217,4 +200,3 @@ function acessQuizz(){
 function backTo(){
     window.location.reload();
 }
-
