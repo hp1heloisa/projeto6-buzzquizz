@@ -2,6 +2,13 @@ axios.defaults.headers.common['Authorization'] = 'vCvQhdKuWXtO3cwYJuvsXTZs';
 let promiseQuizzes = axios.get("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes");
 promiseQuizzes.then(renderQuizzes);
 promiseQuizzes.catch(alert);
+setTimeout(removeLoading,1000);
+setTimeout(addScreen1,1000);
+
+function addScreen1() {
+    const screen1 = document.querySelector('.screen1');
+    screen1.classList.remove('hidden');
+}
 
 let cont,right = 0;
 let objLevels, idQuiz;
@@ -197,11 +204,26 @@ function error() {
     backTo();
 }
 
+function removeLoading(){
+    const loading = document.querySelector('.loading-page');
+    loading.classList.add('hidden')
+}
+
+function loadingPageTo2(){
+    const screen2 = document.querySelector('.screen2');
+    screen2.classList.remove('hidden');
+
+    removeLoading()
+}
+
 function changeScreen1To2 (){
     const screen1 = document.querySelector('.screen1');
-    const screen2 = document.querySelector('.screen2');
     screen1.classList.add('hidden');
-    screen2.classList.remove('hidden');
+
+    const loading = document.querySelector('.loading-page');
+    loading.classList.remove('hidden');
+
+    setTimeout(loadingPageTo2,1000);
 }
 
 function playQuizz(selected){
@@ -224,15 +246,25 @@ function playQuizz(selected){
     const promise = axios.get(`https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idQuiz}`);
     promise.then(renderSelectedQuiz);
     promise.catch(error);
+}
+
+function loadingTo3(){
+    const screen3 = document.querySelector('.screen3');
+    screen3.classList.remove('hidden');
+
+    removeLoading();
 }
 
 
 
 function createQuizz(){
     const screen1 = document.querySelector('.screen1');
-    const screen3 = document.querySelector('.screen3');
     screen1.classList.add('hidden');
-    screen3.classList.remove('hidden');
+
+    const loading = document.querySelector('.loading-page');
+    loading.classList.remove('hidden');
+
+    setTimeout(loadingTo3,1000);
 
 }
 let titleQuizz;

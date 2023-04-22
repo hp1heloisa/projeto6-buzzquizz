@@ -16,7 +16,7 @@
   </head>
   <body>
     <div class="header" onclick="backTo()">BuzzQuizz</div>
-    <div class="screen1">
+    <div class="screen1 hidden">
       <div class="yourQuizzes"></div>
       <div class="menuQuizzes">
         <div class="title">Todos os Quizzes</div>
@@ -73,6 +73,11 @@
       <div class="button3" onclick="nextQuestion(this)">
         Prosseguir pra criar perguntas
       </div>
+    </div>
+
+    <div class="loading-page">
+      <img src="https://thumbs.gfycat.com/BoilingTenderAruanas.webp" alt="loading gif">
+      <p>Carregando</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
