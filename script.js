@@ -42,8 +42,7 @@ function renderQuizzes(list){
                 if (ownDatas[j].id == element.id){
                     addYour.innerHTML += `<div onclick="playQuizz(this)" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
                                                 <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
-                                                <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)"></ion-icon> </div>
-                                            </div>`
+                                                <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)"></ion-icon> </div>                                            </div>`
                 }
             }
             );
@@ -51,7 +50,6 @@ function renderQuizzes(list){
             all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)"> 
                                 <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
                                 <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
-                                <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)"></ion-icon> </div>
                                 </div>
                          </div>`
     });
@@ -62,11 +60,22 @@ function editQuiz(selected){
 
 }
 
+let userSecretKey = JSON.parse(localStorage.getItem("UniqueKey"));
+
 function deleteQuiz(selected){
-    const idDelete = selected.querySelector('idQuiz');
-    const confirm = confirm("Tem certeza que deseja excluir este Quiz?");
-    if (confirm){
-        const promise = axios.delete(`https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idDelete}`)
+    const dadDiv = selected.parentNode.parentNode;
+
+    const idDelete = dadDiv.querySelector('.idImagem').textContent;
+
+    const linkDelete = `https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idDelete}`
+
+    let objDelete = {
+        headers: {"Secret-Key" : userSecretKey }
+    }
+
+    const conf = confirm("Tem certeza que deseja excluir este Quiz?");
+    if (conf){
+        const promise = axios.delete(linkDelete, objDelete);
         promise.then(backTo);
         promise.catch(error);
     }

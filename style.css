@@ -115,6 +115,7 @@ body{
     color: #FFFFFF;
     align-items: end;
     padding-left: 17px;
+    position:relative;
 }
 .imgCase span{
     margin-bottom: 11px;
@@ -530,10 +531,6 @@ input::placeholder{
     font-size: 30px;
     line-height: 29px;
     color: #EC362D;
-}
-
-.caseQuizz{
-    position:relative;
 }
 
 .options-quiz {
