@@ -37,8 +37,7 @@ function renderQuizzes(list){
     });
 }
 
-function scrollNextQuestion(clickedDiv) { //Deu ruimmmmmmmmmmmmmmmmmmmmmm
-
+function scrollNextQuestion(clickedDiv) {
     console.log(clickedDiv)
     const listAnswers = document.querySelectorAll('.container-answers');
     for(let i = 0; i<listAnswers.length; i++){
