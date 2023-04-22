@@ -6,9 +6,6 @@ promiseQuizzes.catch(alert);
 let cont,right = 0;
 let objLevels, idQuiz;
 
-let cont,right = 0;
-let objLevels, idQuiz;
-
 function renderQuizzes(list){
     console.log(list);
     const all = document.querySelector('.allQuizzes');
