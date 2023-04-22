@@ -6,6 +6,9 @@ promiseQuizzes.catch(alert);
 let cont,right = 0;
 let objLevels, idQuiz;
 
+let cont,right = 0;
+let objLevels, idQuiz;
+
 function renderQuizzes(list){
     console.log(list);
     const all = document.querySelector('.allQuizzes');
@@ -202,6 +205,17 @@ function changeScreen1To2 (){
     const screen2 = document.querySelector('.screen2');
     screen1.classList.add('hidden');
     screen2.classList.remove('hidden');
+}
+
+function playQuizz(selected){
+    changeScreen1To2();
+
+    idQuiz = selected.querySelector('.idImagem').textContent;
+    console.log(idQuiz);
+
+    const promise = axios.get(`https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idQuiz}`);
+    promise.then(renderSelectedQuiz);
+    promise.catch(error);
 }
 
 function playQuizz(selected){
