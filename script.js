@@ -3,19 +3,29 @@ let promiseQuizzes = axios.get("https://mock-api.driven.com.br/api/vm/buzzquizz/
 promiseQuizzes.then(renderQuizzes);
 promiseQuizzes.catch(alert);
 
+let cont,right = 0;
+let objLevels, idQuiz;
+
 function renderQuizzes(list){
     console.log(list);
     const all = document.querySelector('.allQuizzes');
     const your = document.querySelector('.yourQuizzes');
     const ownDatas = JSON.parse(localStorage.getItem("dataRecived"));
     console.log(localStorage.getItem("dataRecived"));
-    let own;
-    for (let j=0;j<ownDatas.length;j++){
-        if (ownDatas == null){
+    if (ownDatas == null){
             your.classList.add('divCreate');
             your.innerHTML += '<div class="textYour">Você não criou nenhum quizz ainda :(</div>';
             your.innerHTML += '<div class="create" onclick="createQuizz()">Criar Quizz</div>';
+            list.data.forEach(element => {
+                all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)"> 
+                                    <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
+                                    <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
+                                    </div>
+                             </div>`
+        });
         } else{
+    for (let j=0;j<ownDatas.length;j++){
+        
             if (j==0) { 
                 your.innerHTML += '<div class="titleYour"><span>Seus Quizzes</span> <ion-icon name="add-circle" onclick="createQuizz()"></ion-icon></div>';
                 your.innerHTML += '<div class="allYourQuizzes"></div>';
@@ -23,27 +33,186 @@ function renderQuizzes(list){
             const addYour = document.querySelector('.allYourQuizzes');
             list.data.forEach(element => {
                 if (ownDatas[j].id == element.id){
-                    addYour.innerHTML += `<div onclick="playQuizz()" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
+                    addYour.innerHTML += `<div onclick="playQuizz(this)" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
                                                 <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
                                             </div>`
                 }
             }
             );
-        }
         list.data.forEach(element => {
-            all.innerHTML += `<div class="caseQuizz" onclick="playQuizz()"> 
+            all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)"> 
                                 <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
                                 <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
                                 </div>
-                            </div>`
-        });
+                         </div>`
+    });
+}}
+}
+
+function scrollNextQuestion(clickedDiv) {
+
+    console.log(clickedDiv)
+    const listAnswers = document.querySelectorAll('.container-answers');
+    for(let i = 0; i<listAnswers.length; i++){
+        if(listAnswers[i].classList.contains('correct-answer') || listAnswers[i].classList.contains('incorrect-answer')){
+            console.log(listAnswers[i+1].parentNode)
+            listAnswers[i+1].parentNode.scrollIntoView({behavior:"smooth"});
+        }
     }
 }
-function playQuizz(){
+
+function playAgain(){
+
+    document.querySelector('.container-screen2').innerHTML = '';
+    document.querySelector('.quizz-end').classList.add('hidden')
+    document.querySelector('.buttons-screen2').classList.add('hidden')
+
+    const promise = axios.get(`https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idQuiz}`);
+    promise.then(renderSelectedQuiz);
+    promise.catch(error);
+}
+
+function showEndQuiz(){
+    document.querySelector('.buttons-screen2').classList.remove('hidden');
+    document.querySelector('.quizz-end').classList.remove('hidden')
+
+    document.querySelector('.buttons-screen2').scrollIntoView({behavior:"smooth"});
+}
+
+function isFinished(){
+
+    const listQuestions = document.querySelectorAll('.container-answers');
+
+    for(let i = 0; i<listQuestions.length; i++){
+
+        if(listQuestions[i].classList.contains('incorrect-answer') || listQuestions[i].classList.contains('correct-answer')){
+            cont++
+            console.log(cont)
+            if(listQuestions[i].classList.contains('correct-answer')){
+                right++
+            }
+        }
+    }
+    
+    if(cont===listQuestions.length){
+        setTimeout(showEndQuiz, 2000);
+
+        const hitPercentage = Math.round((right/cont)*100);
+        let levelImage, levelText, levelTitle;
+
+        objLevels.forEach(level => {
+            if(hitPercentage >= level.minValue){
+                levelImage = level.image;
+                levelText = level.text;
+                levelTitle = level.title
+            }
+        })
+
+        document.querySelector('.header-quizz-end p').innerHTML = `${hitPercentage}% de acerto: ${levelTitle}`
+        document.querySelector('.body-end img').src = `${levelImage}`;
+        document.querySelector('.body-end div p').innerHTML = `${levelText}`
+    }
+    cont=0;
+    right=0;
+}
+
+function verifyAnswer(clicked){
+
+    if (clicked.parentNode.classList.contains('correct-answer') || clicked.parentNode.classList.contains('incorrect-answer')){
+        return;
+    }
+
+    clickedNode = clicked.parentNode;
+    const result = clicked.querySelector('span').textContent;
+    if (result == "true"){
+        clickedNode.classList.add('correct-answer');
+        clicked.classList.add('right-answer');
+    }
+    else {
+        clickedNode.classList.add('incorrect-answer');
+        clicked.classList.add('clicked-answer');
+        const wrongSpans = clickedNode.querySelectorAll('span');
+        wrongSpans.forEach(span => {
+            if(span.textContent === "true"){
+                span.parentNode.classList.add('right-answer')
+            }
+            else {
+                span.parentNode.classList.add('wrong-answer')
+            }
+        })
+    }
+    setTimeout(scrollNextQuestion,2000,clickedNode);
+    isFinished();
+}
+
+function renderQuestion(question){
+    const questionAnswers = question.answers;
+    question.answers.sort(() => Math.random()-0.5)
+    const containerScreen2 = document.querySelector('.container-screen2');
+    
+    containerScreen2.innerHTML +=   `<div class="container-question">
+                                        <div class="question" style="background-color:${question.color}">
+                                            <div>
+                                                <p>${question.title}</p>
+                                            </div>
+                                        </div>
+                                        <div class="container-answers">
+                                        </div>
+                                    </div>`;
+    
+    for(let i = 0; i<question.answers.length; i++){
+
+        let thisAnswers = question.answers[i];
+
+        const containerAnswers = document.querySelectorAll('.container-answers');
+        const lastQuestion = containerAnswers[containerAnswers.length - 1];
+
+        lastQuestion.innerHTML +=  `<div class="answer" onclick="verifyAnswer(this)">
+                                        <img
+                                            src=${question.answers[i].image}
+                                            alt="resposta"
+                                        />
+                                        <p>${question.answers[i].text}</p>
+                                        <span class="hidden">${question.answers[i].isCorrectAnswer}</span>
+                                    </div>`
+    }
+}
+
+function renderSelectedQuiz(response){
+    console.log(response);
+    const headerScreen2 = document.querySelector('.header-screen2');
+    headerScreen2.style.backgroundImage = `linear-gradient(0deg, rgba(0, 0, 0, 0.57), rgba(0, 0, 0, 0.57)), url(${response.data.image})`;
+
+    const titleScreen2 = headerScreen2.querySelector('p');
+    titleScreen2.innerHTML = `${response.data.title}`; //problema com a cor do titulo
+
+    const question = response.data.questions;
+    objLevels = response.data.levels;
+
+    question.forEach(renderQuestion);
+}
+
+function error() {
+    alert('Desculpe, aconteceu algum erro com o servidor.');
+    backTo();
+}
+
+function changeScreen1To2 (){
     const screen1 = document.querySelector('.screen1');
     const screen2 = document.querySelector('.screen2');
     screen1.classList.add('hidden');
     screen2.classList.remove('hidden');
+}
+
+function playQuizz(selected){
+    changeScreen1To2();
+
+    idQuiz = selected.querySelector('.idImagem').textContent;
+    console.log(idQuiz);
+
+    const promise = axios.get(`https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idQuiz}`);
+    promise.then(renderSelectedQuiz);
+    promise.catch(error);
 }
 
 
@@ -217,4 +386,3 @@ function acessQuizz(){
 function backTo(){
     window.location.reload();
 }
-
