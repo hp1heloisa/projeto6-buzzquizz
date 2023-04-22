@@ -15,7 +15,7 @@
     <title>BuzzQuizz</title>
   </head>
   <body>
-    <div class="header" onclick="backTo()">BuzzQuizz</div>
+    <div class="header">BuzzQuizz</div>
     <div class="screen1">
       <div class="yourQuizzes"></div>
       <div class="menuQuizzes">
@@ -28,34 +28,57 @@
       <div
         class="header-screen2"
         style="
+          background-image: linear-gradient(
+              0deg,
+              rgba(0, 0, 0, 0.57),
+              rgba(0, 0, 0, 0.57)
+            ),
+            url(${urlHeader});
           background-position: right center;
         "
       >
-        <p></p>
+        <p>${titleHeader}</p>
       </div>
       <div class="container-screen2">
-        
+        <div class="container-question">
+          <!-- CADA PERGUNTA DO QUIZZ -->
+          <div class="question">
+            <div>
+              <p>${titleQuestion}</p>
+            </div>
+          </div>
+          <div class="container-answers">
+            <div class="answer">
+              <img
+                src=${urlAnswer}
+                alt="resposta"
+              />
+              <p>${textAnswer}</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="quizz-end hidden">
+      <div class="quizz-end">
         <div class="header-quizz-end">
-          <p></p>
+          <p>${hitPercentage} de acerto: ${textLevel}</p>
         </div>
         <div class="body-end">
           <img
-            src=;
+            src=${urlEndQuiz}
             alt="resposta quiz"
           />
           <div>
             <p>
+              ${textEndQuiz}
             </p>
           </div>
         </div>
       </div>
-      <div class="buttons-screen2 hidden">
-        <div class="button-play-again" onclick="playAgain(this)">
+      <div class="buttons-screen2">
+        <div class="button-play-again" onclick="playAgain()">
           <p>Reiniciar Quizz</p>
         </div>
-        <div class="button-back-home" onclick="backTo()">
+        <div class="button-back-home" onclick="reload()">
           <p>Voltar para home</p>
         </div>
       </div>
