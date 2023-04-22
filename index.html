@@ -30,6 +30,7 @@
         style="
           background-position: right center;
         "
+        data-test="banner"
       >
         <p></p>
       </div>
@@ -37,25 +38,25 @@
         
       </div>
       <div class="quizz-end hidden">
-        <div class="header-quizz-end">
+        <div class="header-quizz-end" data-test="level-title">
           <p></p>
         </div>
-        <div class="body-end">
+        <div class="body-end" data-test="level-img">
           <img
             src=;
             alt="resposta quiz"
           />
           <div>
-            <p>
+            <p data-test="level-text">
             </p>
           </div>
         </div>
       </div>
       <div class="buttons-screen2 hidden">
-        <div class="button-play-again" onclick="playAgain(this)">
+        <div class="button-play-again" onclick="playAgain(this)" data-test="restart">
           <p>Reiniciar Quizz</p>
         </div>
-        <div class="button-back-home" onclick="backTo()">
+        <div class="button-back-home" onclick="backTo()" data-test="go-home">
           <p>Voltar para home</p>
         </div>
       </div>

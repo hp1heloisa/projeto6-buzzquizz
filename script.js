@@ -150,8 +150,8 @@ function renderQuestion(question){
     question.answers.sort(() => Math.random()-0.5)
     const containerScreen2 = document.querySelector('.container-screen2');
     
-    containerScreen2.innerHTML +=   `<div class="container-question">
-                                        <div class="question" style="background-color:${question.color}">
+    containerScreen2.innerHTML +=   `<div class="container-question" data-test="question">
+                                        <div class="question" style="background-color:${question.color}" data-test="question-title">
                                             <div>
                                                 <p>${question.title}</p>
                                             </div>
@@ -167,12 +167,12 @@ function renderQuestion(question){
         const containerAnswers = document.querySelectorAll('.container-answers');
         const lastQuestion = containerAnswers[containerAnswers.length - 1];
 
-        lastQuestion.innerHTML +=  `<div class="answer" onclick="verifyAnswer(this)">
+        lastQuestion.innerHTML +=  `<div class="answer" onclick="verifyAnswer(this)" data-test="answer">
                                         <img
                                             src=${question.answers[i].image}
                                             alt="resposta"
                                         />
-                                        <p>${question.answers[i].text}</p>
+                                        <p data-test="answer-text">${question.answers[i].text}</p>
                                         <span class="hidden">${question.answers[i].isCorrectAnswer}</span>
                                     </div>`
     }
