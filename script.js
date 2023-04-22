@@ -24,7 +24,7 @@ function renderQuizzes(list){
             your.innerHTML += '<div class="textYour">Você não criou nenhum quizz ainda :(</div>';
             your.innerHTML += '<div class="create" onclick="createQuizz()">Criar Quizz</div>';
             list.data.forEach(element => {
-                all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)"> 
+                all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)">
                                     <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
                                     <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
                                     </div>
@@ -42,6 +42,7 @@ function renderQuizzes(list){
                 if (ownDatas[j].id == element.id){
                     addYour.innerHTML += `<div onclick="playQuizz(this)" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
                                                 <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
+                                                <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)"></ion-icon> </div>
                                             </div>`
                 }
             }
@@ -50,10 +51,25 @@ function renderQuizzes(list){
             all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)"> 
                                 <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
                                 <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
+                                <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)"></ion-icon> </div>
                                 </div>
                          </div>`
     });
 }}
+}
+
+function editQuiz(selected){
+
+}
+
+function deleteQuiz(selected){
+    const idDelete = selected.querySelector('idQuiz');
+    const confirm = confirm("Tem certeza que deseja excluir este Quiz?");
+    if (confirm){
+        const promise = axios.delete(`https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idDelete}`)
+        promise.then(backTo);
+        promise.catch(error);
+    }
 }
 
 function scrollNextQuestion(clickedDiv) {
