@@ -316,12 +316,21 @@ function nextQuestion(div){
     urlCaseQuizz =  dad.querySelector('.divFirstInputs :nth-child(2)');
     const numberQuestions =  dad.querySelector('.divFirstInputs :nth-child(3)');
     level =  dad.querySelector('.divFirstInputs :nth-child(4)');
-    dad.innerHTML = '';
-    dad.innerHTML += '<div class="titleThird">Crie suas perguntas</div>';
-    dad.innerHTML += '<div class ="createDivs"></div>';
-    dad.innerHTML += '<div class="button3" onclick="finalQuest(this)">Prosseguir pra criar níveis</div>'
-    for (let i=0;i<numberQuestions.value;i++){
-        dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate">
+    if (titleQuizz.value.length<20 || titleQuizz.value.length>65 || 
+        !urlCaseQuizz.value.includes('http') || !urlCaseQuizz.value.includes('https') ||
+        level.value<2 || numberQuestions.value<3){
+        alert(`Dados incorretos, verifique se:
+        - Título do quizz tem no mínimo 20 e no máximo 65 caracteres.
+        - URL da Imagem tem formato de URL.
+        - Tem no mínimo 3 perguntas.
+        - Tem no mínimo 2 níveis.`);
+    }else{
+        dad.innerHTML = '';
+        dad.innerHTML += '<div class="titleThird">Crie suas perguntas</div>';
+        dad.innerHTML += '<div class ="createDivs"></div>';
+        dad.innerHTML += '<div class="button3" onclick="finalQuest(this)">Prosseguir pra criar níveis</div>'
+        for (let i=0;i<numberQuestions.value;i++){
+            dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate">
                                                                 <div class="screen3-1" onclick="each(this)"><span>Pergunta ${i+1}</span><ion-icon name="create-outline"></ion-icon></div>
                                                                 <div class="screen3-2 hidden">
                                                                     <span onclick="each(this)">Pergunta ${i+1}</span>
@@ -352,9 +361,10 @@ function nextQuestion(div){
                                                                 </div>
                                                         </div>`;
 
+        }
+        objectToPost = {title: titleQuizz.value, image: urlCaseQuizz.value, questions: [], levels: []};
+        console.log(objectToPost);
     }
-    objectToPost = {title: titleQuizz.value, image: urlCaseQuizz.value, questions: [], levels: []};
-    console.log(objectToPost);
 }
 
 function each(div){
@@ -368,46 +378,80 @@ function each(div){
     }
 }
 function finalQuest(div){
+    let first = false;
+    let second = false;
+    let third = false;
     const dad = div.parentNode;
     const listQuestions = dad.querySelectorAll('.eachCreate .screen3-2');
     for (let i=0; i<listQuestions.length;i++){
-        objectToPost.questions.push({title: listQuestions[i].querySelector('.b1 :nth-child(1)').value,
-                                    color: listQuestions[i].querySelector('.b1 :nth-child(2)').value,
-                                    answers:[
-                                            {
-                                                text: listQuestions[i].querySelector('.b2 :nth-child(1)').value,
-                                                image:listQuestions[i].querySelector('.b2 :nth-child(2)').value,
-                                                isCorrectAnswer: true
-                                            },
-                                            {
-                                                text: listQuestions[i].querySelector('.b3 :nth-child(1)').value,
-                                                image: listQuestions[i].querySelector('.b3 :nth-child(2)').value,
-                                                isCorrectAnswer: false
-                                            }
-                                        ]
-                                    })
-        if (listQuestions[i].querySelector('.b4 :nth-child(1)').value!="" && listQuestions[i].querySelector('.b4 :nth-child(2)').value!=""){
-            objectToPost.questions[i].answers.push({
-                text: listQuestions[i].querySelector('.b4 :nth-child(1)').value,
-                image: listQuestions[i].querySelector('.b4 :nth-child(2)').value,
-                isCorrectAnswer: false
-            });
-        };
-        if (listQuestions[i].querySelector('.b5 :nth-child(1)').value!="" && listQuestions[i].querySelector('.b5 :nth-child(2)').value!=""){
-            objectToPost.questions[i].answers.push({
-                text: listQuestions[i].querySelector('.b5 :nth-child(1)').value,
-                image: listQuestions[i].querySelector('.b5 :nth-child(2)').value,
-                isCorrectAnswer: false
-            });
-        };                              
+        if (listQuestions[i].querySelector('.b1 :nth-child(1)').value.length<20 ||
+            (listQuestions[i].querySelector('.b1 :nth-child(2)').value.length!=7 || !listQuestions[i].querySelector('.b1 :nth-child(2)').value.includes('#')) ||
+            (listQuestions[i].querySelector('.b2 :nth-child(1)').value.length==0 || listQuestions[i].querySelector('.b3 :nth-child(1)').value==0) ||
+            (!listQuestions[i].querySelector('.b2 :nth-child(2)').value.includes('http') || !listQuestions[i].querySelector('.b2 :nth-child(2)').value.includes('https')) ||
+            (!listQuestions[i].querySelector('.b3 :nth-child(2)').value.includes('http') || !listQuestions[i].querySelector('.b3 :nth-child(2)').value.includes('https'))
+            ){
+                first = true;
+        } else{ 
+            objectToPost.questions.push({title: listQuestions[i].querySelector('.b1 :nth-child(1)').value,
+                                        color: listQuestions[i].querySelector('.b1 :nth-child(2)').value,
+                                        answers:[
+                                                {
+                                                    text: listQuestions[i].querySelector('.b2 :nth-child(1)').value,
+                                                    image:listQuestions[i].querySelector('.b2 :nth-child(2)').value,
+                                                    isCorrectAnswer: true
+                                                },
+                                                {
+                                                    text: listQuestions[i].querySelector('.b3 :nth-child(1)').value,
+                                                    image: listQuestions[i].querySelector('.b3 :nth-child(2)').value,
+                                                    isCorrectAnswer: false
+                                                }
+                                            ]
+                                        });
+            if (listQuestions[i].querySelector('.b4 :nth-child(1)').value!="" || listQuestions[i].querySelector('.b4 :nth-child(2)').value!=""){
+                console.log('aqui');
+                console.log(listQuestions[i].querySelector('.b4 :nth-child(2)').value.includes('https'));
+                if (!listQuestions[i].querySelector('.b4 :nth-child(2)').value.includes('http') || !listQuestions[i].querySelector('.b4 :nth-child(2)').value.includes('https')){
+                    second = true;
+                } else{
+                    objectToPost.questions[i].answers.push({
+                        text: listQuestions[i].querySelector('.b4 :nth-child(1)').value,
+                        image: listQuestions[i].querySelector('.b4 :nth-child(2)').value,
+                        isCorrectAnswer: false
+                    });
+                }
+            };
+            if (listQuestions[i].querySelector('.b5 :nth-child(1)').value!="" || listQuestions[i].querySelector('.b5 :nth-child(2)').value!=""){
+                if (!listQuestions[i].querySelector('.b5 :nth-child(2)').value.includes('http') || !listQuestions[i].querySelector('.b5 :nth-child(2)').value.includes('https')){
+                    third = true;
+                } else{
+                    objectToPost.questions[i].answers.push({
+                        text: listQuestions[i].querySelector('.b5 :nth-child(1)').value,
+                        image: listQuestions[i].querySelector('.b5 :nth-child(2)').value,
+                        isCorrectAnswer: false
+                    });
+                }
+            };
+        };                                  
     };
-    console.log(objectToPost);
-    dad.innerHTML = '';
-    dad.innerHTML += '<div class="titleThird">Agora, decida os níveis</div>';
-    dad.innerHTML += '<div class ="createDivs"></div>';
-    dad.innerHTML += '<div class="button3" onclick="finalQuizz(this)">Finalizar Quizz</div>'
-    for (let i=0;i<level.value;i++){
-        dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate">
+    if (first || second || third){
+        alert(`Dados incorretos, verifique se:
+        - Texto da pergunta tem no mínimo 20 caracteres.
+        - A cor de fundo é uma cor em hexadecimal (começar em "#", seguida de 6 caracteres hexadecimais, ou seja, números ou letras de A a F).
+        - Textos das respostas não está vazio.
+        - URL das imagens de resposta está no formato de URL.
+        Obs: É obrigatória a inserção da resposta correta e de pelo menos 1 resposta errada. Portanto, é permitido existirem perguntas com só 2 ou 3 respostas em vez de 4.
+        `);
+        first = false;
+        second = false;
+        third = false;
+    }else{
+        console.log(objectToPost);
+        dad.innerHTML = '';
+        dad.innerHTML += '<div class="titleThird">Agora, decida os níveis</div>';
+        dad.innerHTML += '<div class ="createDivs"></div>';
+        dad.innerHTML += '<div class="button3" onclick="finalQuizz(this)">Finalizar Quizz</div>'
+        for (let i=0;i<level.value;i++){
+            dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate">
                                                                 <div class="screen3-1" onclick="each(this)"><span>Nível ${i+1}</span><ion-icon name="create-outline"></ion-icon></div>
                                                                 <div class="screen3-2 hidden">
                                                                     <span onclick="each(this)">Nível ${i+1}</span>
@@ -418,47 +462,74 @@ function finalQuest(div){
                                                                         <input type="text" placeholder="Descrição do nível">
                                                                     </div>                                         
                                                                 </div>
-                                                        </div>`;
+                                                            </div>`;
+        }
     }
 }
 let listSendStorage = {id:"",key:""};
 function finalQuizz(div){
+    let num = 0 
+    let forth = false;
     const dad = div.parentNode;
     const listLevels = dad.querySelectorAll('.eachCreate .screen3-2');
     for (let i=0; i<listLevels.length;i++){
-        objectToPost.levels.push({
+        if(listLevels[i].querySelector('.blockInputs :nth-child(2)').value == 0){ 
+            num++;
+        }
+        if (listLevels[i].querySelector('.blockInputs :nth-child(1)').value.length<10 || 
+            !listLevels[i].querySelector('.blockInputs :nth-child(3)').value.includes('http') ||
+            !listLevels[i].querySelector('.blockInputs :nth-child(3)').value.includes('https') ||
+            listLevels[i].querySelector('.blockInputs :nth-child(4)').value<30 ||
+            listLevels[i].querySelector('.blockInputs :nth-child(2)').value>100 ||
+            listLevels[i].querySelector('.blockInputs :nth-child(2)').value<0 ||
+            listLevels[i].querySelector('.blockInputs :nth-child(2)').value==""
+        ){ 
+            forth = false;
+        }else if (num!=0){
+            objectToPost.levels.push({
                                         title: listLevels[i].querySelector('.blockInputs :nth-child(1)').value,
                                         image: listLevels[i].querySelector('.blockInputs :nth-child(3)').value,
                                         text: listLevels[i].querySelector('.blockInputs :nth-child(4)').value,
                                         minValue: listLevels[i].querySelector('.blockInputs :nth-child(2)').value
                                     });
-                                        
+            forth = true;
+        }                             
     }
-    console.log(objectToPost);
-    let datasToSend;
-    let promisePost = axios.post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes",objectToPost);
-    promisePost.then(element => {
-        console.log('deu bom');
-        listSendStorage.id = element.data.id;
-        listSendStorage.key = element.data.key;
-        if (localStorage.getItem("dataRecived") != null){
-            let teste = JSON.parse(localStorage.getItem("dataRecived"));
-            teste.push(listSendStorage);
-            datasToSend = JSON.stringify(teste);
-            localStorage.setItem("dataRecived", datasToSend);
-        } else{
-            datasToSend = JSON.stringify([listSendStorage]);
-            localStorage.setItem("dataRecived", datasToSend);
-        }
-    });
-    promisePost.catch(alert);
-    dad.innerHTML = '';
-    dad.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
-    dad.innerHTML += `<div class="caseQuizz3" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
+    if (forth){
+        console.log(objectToPost);
+        let datasToSend;
+        let promisePost = axios.post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes",objectToPost);
+        promisePost.then(element => {
+            console.log('deu bom');
+            listSendStorage.id = element.data.id;
+            listSendStorage.key = element.data.key;
+            if (localStorage.getItem("dataRecived") != null){
+                let teste = JSON.parse(localStorage.getItem("dataRecived"));
+                teste.push(listSendStorage);
+                datasToSend = JSON.stringify(teste);
+                localStorage.setItem("dataRecived", datasToSend);
+            } else{
+                datasToSend = JSON.stringify([listSendStorage]);
+                localStorage.setItem("dataRecived", datasToSend);
+            }
+        });
+        promisePost.catch(alert);
+        dad.innerHTML = '';
+        dad.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
+        dad.innerHTML += `<div class="caseQuizz3" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
                                 <span>${titleQuizz.value}</span>
-                        </div>`;
-    dad.innerHTML += '<div class="buttonEnd" onclick="acessQuizz(this)">Acessar Quizz</div>'
-    dad.innerHTML += '<div class="backHome" onclick="backTo()">Voltar pra home</div>'
+                            </div>`;
+        dad.innerHTML += '<div class="buttonEnd" onclick="acessQuizz(this)">Acessar Quizz</div>'
+        dad.innerHTML += '<div class="backHome" onclick="backTo()">Voltar pra home</div>'
+    }
+    else{
+        alert(`Dados incorretos, verique se:
+        - Título do nível tem no mínimo 10 caracteres.
+        - % de acerto mínima é um número entre 0 e 100.
+        - URL da imagem do nível tem formato de URL.
+        - Descrição do nível tem no mínimo 30 caracteres.
+        - Tem pelo menos 1 nível cuja % de acerto mínima é 0%.`);
+    }
 }
 
 function acessQuizz(){
