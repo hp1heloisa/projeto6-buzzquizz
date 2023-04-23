@@ -23,9 +23,9 @@ function renderQuizzes(list){
     if (ownDatas == null){
             your.classList.add('divCreate');
             your.innerHTML += '<div class="textYour">Você não criou nenhum quizz ainda :(</div>';
-            your.innerHTML += '<div class="create" onclick="createQuizz()">Criar Quizz</div>';
+            your.innerHTML += '<div class="create" onclick="createQuizz()" data-test="create-btn">Criar Quizz</div>';
             list.data.forEach(element => {
-                all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)">
+                all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)" data-test="others-quiz">
                                     <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
                                     <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
                                     </div>
@@ -34,22 +34,22 @@ function renderQuizzes(list){
         } else{
             for (let j=0;j<ownDatas.length;j++){
                 if (j==0) { 
-                    your.innerHTML += '<div class="titleYour"><span>Seus Quizzes</span> <ion-icon name="add-circle" onclick="createQuizz()"></ion-icon></div>';
+                    your.innerHTML += '<div class="titleYour"><span>Seus Quizzes</span> <ion-icon name="add-circle" onclick="createQuizz()" data-test="create-btn"></ion-icon></div>';
                     your.innerHTML += '<div class="allYourQuizzes"></div>';
                 }
                 const addYour = document.querySelector('.allYourQuizzes');
                 list.data.forEach(element => {
                     if (ownDatas[j].id == element.id){
                         aux++;
-                        addYour.innerHTML += `<div onclick="playQuizz(this)" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
+                        addYour.innerHTML += `<div onclick="playQuizz(this)" data-test="my-quiz" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
                                                     <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
-                                                    <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)"></ion-icon> </div>                                           
+                                                    <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)" data-test="edit"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)" data-test="delete"></ion-icon> </div>                                           
                                                 </div>`
                     }
                 }
                 );
                 list.data.forEach(element => {
-                all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)"> 
+                all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)" data-test="others-quiz"> 
                                     <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
                                         <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
                                     </div>
@@ -60,7 +60,7 @@ function renderQuizzes(list){
                 your.classList.add('divCreate');
                 your.innerHTML = '';
                 your.innerHTML += '<div class="textYour">Você não criou nenhum quizz ainda :(</div>';
-                your.innerHTML += '<div class="create" onclick="createQuizz()">Criar Quizz</div>';
+                your.innerHTML += '<div class="create" onclick="createQuizz()" data-test="create-btn">Criar Quizz</div>';
             };
         }
 }
@@ -328,34 +328,34 @@ function nextQuestion(div){
         dad.innerHTML = '';
         dad.innerHTML += '<div class="titleThird">Crie suas perguntas</div>';
         dad.innerHTML += '<div class ="createDivs"></div>';
-        dad.innerHTML += '<div class="button3" onclick="finalQuest(this)">Prosseguir pra criar níveis</div>'
+        dad.innerHTML += '<div class="button3" onclick="finalQuest(this)" data-test="go-create-levels">Prosseguir pra criar níveis</div>'
         for (let i=0;i<numberQuestions.value;i++){
-            dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate">
-                                                                <div class="screen3-1" onclick="each(this)"><span>Pergunta ${i+1}</span><ion-icon name="create-outline"></ion-icon></div>
+            dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate" data-test="question-ctn">
+                                                                <div class="screen3-1" onclick="each(this)"><span>Pergunta ${i+1}</span><ion-icon name="create-outline" onclick="each(this)" data-test="toggle"></ion-icon></div>
                                                                 <div class="screen3-2 hidden">
                                                                     <span onclick="each(this)">Pergunta ${i+1}</span>
                                                                     <div class="blockInputs b1">
-                                                                        <input type="text" placeholder="Texto da pergunta">
-                                                                        <input type="text" placeholder="Cor de fundo da pergunta">
+                                                                        <input type="text" placeholder="Texto da pergunta" data-test="question-input">
+                                                                        <input type="text" placeholder="Cor de fundo da pergunta" data-test="question-color-input">
                                                                     </div>
                                                                     <span>Resposta correta</span>
                                                                     <div class="blockInputs b2">
-                                                                        <input type="text" placeholder="Resposta correta">
-                                                                        <input type="text" placeholder="URL da imagem">
+                                                                        <input type="text" placeholder="Resposta correta" data-test="correct-answer-input">
+                                                                        <input type="text" placeholder="URL da imagem" data-test="correct-img-input">
                                                                     </div>
                                                                     <span>Respostas incorretas</span>
                                                                     <div class="allBlocks">
                                                                         <div class="blockInputs b3">
-                                                                            <input type="text" placeholder="Resposta incorreta 1">
-                                                                            <input type="text" placeholder="URL da imagem 1">
+                                                                            <input type="text" placeholder="Resposta incorreta 1" data-test="wrong-answer-input">
+                                                                            <input type="text" placeholder="URL da imagem 1" data-test="wrong-img-input">
                                                                         </div>
                                                                         <div class="blockInputs b4">
-                                                                            <input type="text" placeholder="Resposta incorreta 2">
-                                                                            <input type="text" placeholder="URL da imagem 2">
+                                                                            <input type="text" placeholder="Resposta incorreta 2" data-test="wrong-answer-input">
+                                                                            <input type="text" placeholder="URL da imagem 2" data-test="wrong-img-input">
                                                                         </div>
                                                                         <div class="blockInputs b5">
-                                                                            <input type="text" placeholder="Resposta incorreta 3">
-                                                                            <input type="text" placeholder="URL da imagem 3">
+                                                                            <input type="text" placeholder="Resposta incorreta 3" data-test="wrong-answer-input">
+                                                                            <input type="text" placeholder="URL da imagem 3" data-test="wrong-img-input">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -449,17 +449,17 @@ function finalQuest(div){
         dad.innerHTML = '';
         dad.innerHTML += '<div class="titleThird">Agora, decida os níveis</div>';
         dad.innerHTML += '<div class ="createDivs"></div>';
-        dad.innerHTML += '<div class="button3" onclick="finalQuizz(this)">Finalizar Quizz</div>'
+        dad.innerHTML += '<div class="button3" onclick="finalQuizz(this)" data-test="finish">Finalizar Quizz</div>'
         for (let i=0;i<level.value;i++){
-            dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate">
-                                                                <div class="screen3-1" onclick="each(this)"><span>Nível ${i+1}</span><ion-icon name="create-outline"></ion-icon></div>
+            dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate" data-test="level-ctn">
+                                                                <div class="screen3-1" onclick="each(this)"><span>Nível ${i+1}</span><ion-icon name="create-outline" onclick="each(this)" data-test="toggle"></ion-icon></div>
                                                                 <div class="screen3-2 hidden">
                                                                     <span onclick="each(this)">Nível ${i+1}</span>
                                                                     <div class="blockInputs">
-                                                                        <input type="text" placeholder="Título do nível">
-                                                                        <input type="text" placeholder="% de acerto mínima">
-                                                                        <input type="text" placeholder="URL da imagem do nível">
-                                                                        <input type="text" placeholder="Descrição do nível">
+                                                                        <input type="text" placeholder="Título do nível" data-test="level-input">
+                                                                        <input type="text" placeholder="% de acerto mínima" data-test="level-percent-input">
+                                                                        <input type="text" placeholder="URL da imagem do nível" data-test="level-img-input">
+                                                                        <input type="text" placeholder="Descrição do nível" data-test="level-description-input">
                                                                     </div>                                         
                                                                 </div>
                                                             </div>`;
@@ -516,11 +516,11 @@ function finalQuizz(div){
         promisePost.catch(alert);
         dad.innerHTML = '';
         dad.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
-        dad.innerHTML += `<div class="caseQuizz3" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
+        dad.innerHTML += `<div class="caseQuizz3" data-test="success-banner" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
                                 <span>${titleQuizz.value}</span>
                             </div>`;
-        dad.innerHTML += '<div class="buttonEnd" onclick="acessQuizz(this)">Acessar Quizz</div>'
-        dad.innerHTML += '<div class="backHome" onclick="backTo()">Voltar pra home</div>'
+        dad.innerHTML += '<div class="buttonEnd" onclick="acessQuizz(this)" data-test="go-quiz">Acessar Quizz</div>'
+        dad.innerHTML += '<div class="backHome" onclick="backTo()" data-test="go-home">Voltar pra home</div>'
     }
     else{
         alert(`Dados incorretos, verique se:
