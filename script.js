@@ -15,8 +15,10 @@ let objLevels, idQuiz;
 let ownDatas = JSON.parse(localStorage.getItem("dataRecived"));
 console.log(ownDatas);
 let aux = 0;
+let listAllQuizzes;
 function renderQuizzes(list){
     console.log(list);
+    listAllQuizzes = list;
     const all = document.querySelector('.allQuizzes');
     const your = document.querySelector('.yourQuizzes');
     console.log(localStorage.getItem("dataRecived"));
@@ -65,9 +67,6 @@ function renderQuizzes(list){
         }
 }
 
-function editQuiz(selected){
-
-}
 function deleteQuiz(selected){
     const dadDiv = selected.parentNode.parentNode;
     const idDelete = dadDiv.querySelector('.idImagem').textContent;
@@ -290,7 +289,12 @@ function playQuizz(selected){
 function loadingTo3(){
     const screen3 = document.querySelector('.screen3');
     screen3.classList.remove('hidden');
-
+    if (newObjectToPost != undefined){
+        screen3.querySelector('.divFirstInputs :nth-child(1)').value = newObjectToPost.title
+        screen3.querySelector('.divFirstInputs :nth-child(2)').value = newObjectToPost.image
+        screen3.querySelector('.divFirstInputs :nth-child(3)').value = newObjectToPost.questions.length
+        screen3.querySelector('.divFirstInputs :nth-child(4)').value = newObjectToPost.levels.length
+    }
     removeLoading();
 }
 
@@ -303,7 +307,7 @@ function createQuizz(){
     const loading = document.querySelector('.loading-page');
     loading.classList.remove('hidden');
 
-    setTimeout(loadingTo3,1000);
+    setTimeout(loadingTo3,1010);
 
 }
 let titleQuizz;
@@ -360,11 +364,53 @@ function nextQuestion(div){
                                                                     </div>
                                                                 </div>
                                                         </div>`;
+            if (newObjectToPost != undefined){
+                let listB1 = dad.querySelectorAll('.b1');
+                console.log(listB1[i].querySelector('.b1 :nth-child(1)').value)
+                console.log(newObjectToPost.questions[i].title)
+                for (let k=0; k<listB1.length;k++){
+                    listB1[k].querySelector('.b1 :nth-child(1)').value = newObjectToPost.questions[k].title;
+                    listB1[k].querySelector('.b1 :nth-child(2)').value = newObjectToPost.questions[k].color;
+                }
+                for (let j=0; j<newObjectToPost.questions[i].answers.length;j++){
+                    let listB = dad.querySelectorAll(`.b${j+2}`);
+                    for (let k=0; k<listB.length;k++){
+                        listB[k].querySelector(`.b${j+2} :nth-child(1)`).value = newObjectToPost.questions[k].answers[j].text;
+                        listB[k].querySelector(`.b${j+2} :nth-child(2)`).value = newObjectToPost.questions[k].answers[j].image;
+                    }
+                }
+            }
 
         }
+
         objectToPost = {title: titleQuizz.value, image: urlCaseQuizz.value, questions: [], levels: []};
         console.log(objectToPost);
     }
+}
+let newObjectToPost;
+let idEdit;
+let keyEdit
+
+function editQuiz(selected){
+    const screen2 = document.querySelector('.screen2');
+    function teste2(){
+        screen2.classList.add('hidden');
+    }
+    setTimeout(teste2,1010);
+    const dadDiv = selected.parentNode.parentNode;
+    idEdit = dadDiv.querySelector('.idImagem').textContent;
+    for (let i=0; i<ownDatas.length; i++){
+        console.log(keyEdit);
+        if (idEdit == ownDatas[i].id){
+            keyEdit = ownDatas[i].key;
+        }
+    }
+    for (let i=0; i<listAllQuizzes.data.length;i++){
+        if (idEdit == listAllQuizzes.data[i].id){
+            newObjectToPost = listAllQuizzes.data[i];
+        }
+    }
+    createQuizz();
 }
 
 function each(div){
@@ -463,6 +509,15 @@ function finalQuest(div){
                                                                     </div>                                         
                                                                 </div>
                                                             </div>`;
+            if (newObjectToPost != undefined){
+                let block = dad.querySelectorAll('.blockInputs');
+                for (let j=0; j<block.length; j++){
+                    block[j].querySelector('.blockInputs :nth-child(1)').value = newObjectToPost.levels[j].title;
+                    block[j].querySelector('.blockInputs :nth-child(2)').value = newObjectToPost.levels[j].minValue;
+                    block[j].querySelector('.blockInputs :nth-child(3)').value = newObjectToPost.levels[j].image;
+                    block[j].querySelector('.blockInputs :nth-child(4)').value = newObjectToPost.levels[j].text;
+                }
+            }
         }
     }
 }
@@ -497,30 +552,44 @@ function finalQuizz(div){
     }
     if (forth){
         console.log(objectToPost);
-        let datasToSend;
-        let promisePost = axios.post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes",objectToPost);
-        promisePost.then(element => {
-            console.log('deu bom');
-            listSendStorage.id = element.data.id;
-            listSendStorage.key = element.data.key;
-            if (localStorage.getItem("dataRecived") != null){
-                let teste = JSON.parse(localStorage.getItem("dataRecived"));
-                teste.push(listSendStorage);
-                datasToSend = JSON.stringify(teste);
-                localStorage.setItem("dataRecived", datasToSend);
-            } else{
-                datasToSend = JSON.stringify([listSendStorage]);
-                localStorage.setItem("dataRecived", datasToSend);
+        console.log('aquiiiii'+idEdit);
+        console.log('aquiiiii'+keyEdit);
+
+        if (newObjectToPost != undefined){
+            const linkEdit = `https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idEdit}`
+            let objEdit = {headers: {'Secret-Key': keyEdit }};
+            const conf = confirm("Tem certeza que deseja editar este Quiz?");
+            if (conf){
+                const promise = axios.put(linkEdit, objectToPost, objEdit);
+                promise.then(window.location.reload());
+                promise.catch(error);
             }
-        });
-        promisePost.catch(alert);
-        dad.innerHTML = '';
-        dad.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
-        dad.innerHTML += `<div class="caseQuizz3" data-test="success-banner" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
-                                <span>${titleQuizz.value}</span>
-                            </div>`;
-        dad.innerHTML += '<div class="buttonEnd" onclick="acessQuizz(this)" data-test="go-quiz">Acessar Quizz</div>'
-        dad.innerHTML += '<div class="backHome" onclick="backTo()" data-test="go-home">Voltar pra home</div>'
+        }else{ 
+            let datasToSend;
+            let promisePost = axios.post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes",objectToPost);
+            promisePost.then(element => {
+                console.log('deu bom');
+                listSendStorage.id = element.data.id;
+                listSendStorage.key = element.data.key;
+                if (localStorage.getItem("dataRecived") != null){
+                    let teste = JSON.parse(localStorage.getItem("dataRecived"));
+                    teste.push(listSendStorage);
+                    datasToSend = JSON.stringify(teste);
+                    localStorage.setItem("dataRecived", datasToSend);
+                } else{
+                    datasToSend = JSON.stringify([listSendStorage]);
+                    localStorage.setItem("dataRecived", datasToSend);
+                }
+                dad.innerHTML = '';
+                dad.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
+                dad.innerHTML += `<div class="caseQuizz3" data-test="success-banner" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
+                                    <span>${titleQuizz.value}</span>
+                                </div>`;
+                dad.innerHTML += '<div class="buttonEnd" onclick="playQuizz(this)" data-test="go-quiz">Acessar Quizz</div>'
+                dad.innerHTML += '<div class="backHome" onclick="backTo()" data-test="go-home">Voltar pra home</div>'
+            });
+            promisePost.catch(alert);
+            }
     }
     else{
         alert(`Dados incorretos, verique se:
@@ -531,11 +600,6 @@ function finalQuizz(div){
         - Tem pelo menos 1 nível cuja % de acerto mínima é 0%.`);
     }
 }
-
-function acessQuizz(){
-    alert();
-}
-
 function backTo(){
     window.location.reload();
 }
