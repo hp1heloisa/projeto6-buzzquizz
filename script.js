@@ -28,10 +28,9 @@ function renderQuizzes(list){
             your.innerHTML += '<button class="create" onclick="createQuizz()" data-test="create-btn">Criar Quizz</button>';
             list.data.forEach(element => {
                 all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)" data-test="others-quiz">
-                                    <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
-                                    <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
-                                    </div>
-                             </div>`
+                                        <img class="imgCase" src="${element.image}">
+                                        <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
+                                    </div>`
         });
         } else{
             for (let j=0;j<ownDatas.length;j++){
@@ -43,18 +42,21 @@ function renderQuizzes(list){
                 list.data.forEach(element => {
                     if (ownDatas[j].id == element.id){
                         aux++;
-                        addYour.innerHTML += `<div onclick="playQuizz(this)" data-test="my-quiz" class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position:center; background-size:100%;">
-                                                    <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
-                                                    <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)" data-test="edit"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)" data-test="delete"></ion-icon> </div>                                           
+                        addYour.innerHTML += `<div class="caseQuizz" data-test="my-quiz" class="caseQuizz">
+                                                    <div class="backImg" onclick="playQuizz(this)">
+                                                        <span>${element.title}</span><span class="hidden idImagem">${element.id}</span> 
+                                                    </div>
+                                                    <img class="imgCase" src="${element.image}">
+                                                    <div class="options-quiz"> <ion-icon name="create-outline" onclick="editQuiz(this)" data-test="edit"></ion-icon> <ion-icon name="trash-outline" onclick="deleteQuiz(this)" data-test="delete"></ion-icon> </div>                                          
                                                 </div>`
+                    } else{
+                        all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)" data-test="others-quiz">
+                                            <div class="backImg"><span>${element.title}</span><span class="hidden idImagem">${element.id}</span></div>
+                                            <img class="imgCase" src="${element.image}">
+                                        </div>`
                     }
                 }
                 );
-                list.data.forEach(element => {
-                all.innerHTML += `<div class="imgCase caseQuizz" onclick="playQuizz(this)" data-test="others-quiz" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
-                                        <span>${element.title}</span><span class="hidden idImagem">${element.id}</span>
-                                </div>`
-                });
             }
             if (aux == 0){ 
                 your.classList.add('divCreate');
@@ -222,6 +224,10 @@ function renderQuestion(question){
 }
 
 function renderSelectedQuiz(response){
+    const hiddenScreen3 = document.querySelector('.screen3');
+    if (hiddenScreen3.classList.contains('hidden')==false){
+        hiddenScreen3.classList.add('hidden');
+    }
     console.log(response);
     const headerScreen2 = document.querySelector('.header-screen2');
     headerScreen2.style.backgroundImage = `linear-gradient(0deg, rgba(0, 0, 0, 0.57), rgba(0, 0, 0, 0.57)), url(${response.data.image})`;
@@ -264,7 +270,10 @@ function changeScreen1To2 (){
 
 function playQuizz(selected){
     changeScreen1To2();
-
+    const loadScreen3 = document.querySelector('.screen3');
+    if (loadScreen3.classList.contains('hidden')==false){
+        loadScreen3.classList.add('hidden');
+    }
     idQuiz = selected.querySelector('.idImagem').textContent;
     console.log(idQuiz);
 
@@ -273,16 +282,6 @@ function playQuizz(selected){
     promise.catch(error);
 }
 
-function playQuizz(selected){
-    changeScreen1To2();
-
-    idQuiz = selected.querySelector('.idImagem').textContent;
-    console.log(idQuiz);
-
-    const promise = axios.get(`https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idQuiz}`);
-    promise.then(renderSelectedQuiz);
-    promise.catch(error);
-}
 let oldObjectToPost;
 function loadingTo3(){
     const screen3 = document.querySelector('.screen3');
@@ -306,7 +305,7 @@ function createQuizz(){
     const loading = document.querySelector('.loading-page');
     loading.classList.remove('hidden');
 
-    setTimeout(loadingTo3,1010);
+    setTimeout(loadingTo3,1000);
 
 }
 let titleQuizz;
@@ -388,11 +387,6 @@ let idEdit;
 let keyEdit
 
 function editQuiz(selected){
-    const screen2 = document.querySelector('.screen2');
-    function teste2(){
-        screen2.classList.add('hidden');
-    }
-    setTimeout(teste2,1010);
     const dadDiv = selected.parentNode.parentNode;
     idEdit = dadDiv.querySelector('.idImagem').textContent;
     for (let i=0; i<ownDatas.length; i++){
@@ -614,10 +608,11 @@ function send(obj){
         }
         daD.innerHTML = '';
         daD.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
-        daD.innerHTML += `<div class="caseQuizz3" data-test="success-banner" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
-                            <span>${titleQuizz.value}</span>
+        daD.innerHTML += `<div class="caseQuizz3" data-test="success-banner">
+                            <div class="backImg3"><span>${titleQuizz.value}</span><span class="hidden idImagem">${element.id}</span></div>
+                            <img class="imgCase" src="${urlCaseQuizz.value}">
                         </div>`;
-        daD.innerHTML += '<button class="buttonEnd" onclick="playQuizz(this)" data-test="go-quiz">Acessar Quizz</button>'
+        daD.innerHTML += `<button class="buttonEnd" onclick="playQuizz(this)" data-test="go-quiz">Acessar Quizz <span class="hidden idImagem">${element.data.id}</span></button>`
         daD.innerHTML += '<button class="backHome" onclick="backTo()" data-test="go-home">Voltar pra home</>'
     });
     promisePost.catch(error);
