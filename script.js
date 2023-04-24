@@ -2,8 +2,8 @@ axios.defaults.headers.common['Authorization'] = 'vCvQhdKuWXtO3cwYJuvsXTZs';
 let promiseQuizzes = axios.get("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes");
 promiseQuizzes.then(renderQuizzes);
 promiseQuizzes.catch(alert);
-setTimeout(removeLoading,1000);
-setTimeout(addScreen1,1000);
+
+
 
 function addScreen1() {
     const screen1 = document.querySelector('.screen1');
