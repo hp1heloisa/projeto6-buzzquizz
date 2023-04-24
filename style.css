@@ -581,6 +581,10 @@ input::placeholder{
 .hidden{
     display: none;
 }
+.add{
+    background: none;
+    border: none;
+}
 
 /*RESPONSIVIDADE*/
 @media (max-width:1100px){

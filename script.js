@@ -36,7 +36,7 @@ function renderQuizzes(list){
         } else{
             for (let j=0;j<ownDatas.length;j++){
                 if (j==0) { 
-                    your.innerHTML += '<div class="titleYour"><span>Seus Quizzes</span> <ion-icon name="add-circle" onclick="createQuizz()" data-test="create-btn"></ion-icon></div>';
+                    your.innerHTML += '<div class="titleYour"><span>Seus Quizzes</span> <button class="add"><ion-icon name="add-circle" onclick="createQuizz()" data-test="create-btn"></ion-icon></div></button>';
                     your.innerHTML += '<div class="allYourQuizzes"></div>';
                 }
                 const addYour = document.querySelector('.allYourQuizzes');
@@ -283,17 +283,18 @@ function playQuizz(selected){
     promise.then(renderSelectedQuiz);
     promise.catch(error);
 }
-
+let oldObjectToPost;
 function loadingTo3(){
     const screen3 = document.querySelector('.screen3');
     screen3.classList.remove('hidden');
-    if (newObjectToPost != undefined){
-        screen3.querySelector('.divFirstInputs :nth-child(1)').value = newObjectToPost.title
-        screen3.querySelector('.divFirstInputs :nth-child(2)').value = newObjectToPost.image
-        screen3.querySelector('.divFirstInputs :nth-child(3)').value = newObjectToPost.questions.length
-        screen3.querySelector('.divFirstInputs :nth-child(4)').value = newObjectToPost.levels.length
+    if (oldObjectToPost != undefined){
+        screen3.querySelector('.divFirstInputs :nth-child(1)').value = oldObjectToPost.title
+        screen3.querySelector('.divFirstInputs :nth-child(2)').value = oldObjectToPost.image
+        screen3.querySelector('.divFirstInputs :nth-child(3)').value = oldObjectToPost.questions.length
+        screen3.querySelector('.divFirstInputs :nth-child(4)').value = oldObjectToPost.levels.length
     }
     removeLoading();
+    console.log(oldObjectToPost);
 }
 
 
@@ -362,30 +363,30 @@ function nextQuestion(div){
                                                                     </div>
                                                                 </div>
                                                         </div>`;
-            if (newObjectToPost != undefined){
+            if (oldObjectToPost != undefined){
                 let listB1 = dad.querySelectorAll('.b1');
                 console.log(listB1[i].querySelector('.b1 :nth-child(1)').value)
-                console.log(newObjectToPost.questions[i].title)
+                console.log(oldObjectToPost.questions[i].title)
                 for (let k=0; k<listB1.length;k++){
-                    listB1[k].querySelector('.b1 :nth-child(1)').value = newObjectToPost.questions[k].title;
-                    listB1[k].querySelector('.b1 :nth-child(2)').value = newObjectToPost.questions[k].color;
+                    listB1[k].querySelector('.b1 :nth-child(1)').value = oldObjectToPost.questions[k].title;
+                    listB1[k].querySelector('.b1 :nth-child(2)').value = oldObjectToPost.questions[k].color;
                 }
-                for (let j=0; j<newObjectToPost.questions[i].answers.length;j++){
+                for (let j=0; j<oldObjectToPost.questions[i].answers.length;j++){
                     let listB = dad.querySelectorAll(`.b${j+2}`);
                     for (let k=0; k<listB.length;k++){
-                        listB[k].querySelector(`.b${j+2} :nth-child(1)`).value = newObjectToPost.questions[k].answers[j].text;
-                        listB[k].querySelector(`.b${j+2} :nth-child(2)`).value = newObjectToPost.questions[k].answers[j].image;
+                        listB[k].querySelector(`.b${j+2} :nth-child(1)`).value = oldObjectToPost.questions[k].answers[j].text;
+                        listB[k].querySelector(`.b${j+2} :nth-child(2)`).value = oldObjectToPost.questions[k].answers[j].image;
                     }
                 }
             }
 
         }
+        console.log(oldObjectToPost);
 
         objectToPost = {title: titleQuizz.value, image: urlCaseQuizz.value, questions: [], levels: []};
         console.log(objectToPost);
     }
 }
-let newObjectToPost;
 let idEdit;
 let keyEdit
 
@@ -405,9 +406,11 @@ function editQuiz(selected){
     }
     for (let i=0; i<listAllQuizzes.data.length;i++){
         if (idEdit == listAllQuizzes.data[i].id){
-            newObjectToPost = listAllQuizzes.data[i];
+            oldObjectToPost = listAllQuizzes.data[i];
         }
     }
+    console.log('aquiii')
+    console.log(oldObjectToPost);
     createQuizz();
 }
 
@@ -507,24 +510,25 @@ function finalQuest(div){
                                                                     </div>                                         
                                                                 </div>
                                                             </div>`;
-            if (newObjectToPost != undefined){
+            if (oldObjectToPost != undefined){
                 let block = dad.querySelectorAll('.blockInputs');
                 for (let j=0; j<block.length; j++){
-                    block[j].querySelector('.blockInputs :nth-child(1)').value = newObjectToPost.levels[j].title;
-                    block[j].querySelector('.blockInputs :nth-child(2)').value = newObjectToPost.levels[j].minValue;
-                    block[j].querySelector('.blockInputs :nth-child(3)').value = newObjectToPost.levels[j].image;
-                    block[j].querySelector('.blockInputs :nth-child(4)').value = newObjectToPost.levels[j].text;
+                    block[j].querySelector('.blockInputs :nth-child(1)').value = oldObjectToPost.levels[j].title;
+                    block[j].querySelector('.blockInputs :nth-child(2)').value = oldObjectToPost.levels[j].minValue;
+                    block[j].querySelector('.blockInputs :nth-child(3)').value = oldObjectToPost.levels[j].image;
+                    block[j].querySelector('.blockInputs :nth-child(4)').value = oldObjectToPost.levels[j].text;
                 }
             }
         }
     }
 }
 let listSendStorage = {id:"",key:""};
+let daD;
 function finalQuizz(div){
     let num = 0 
     let forth = false;
-    const dad = div.parentNode;
-    const listLevels = dad.querySelectorAll('.eachCreate .screen3-2');
+    daD = div.parentNode;
+    const listLevels = daD.querySelectorAll('.eachCreate .screen3-2');
     for (let i=0; i<listLevels.length;i++){
         if(listLevels[i].querySelector('.blockInputs :nth-child(2)').value == 0){ 
             num++;
@@ -553,43 +557,36 @@ function finalQuizz(div){
         console.log('aquiiiii'+idEdit);
         console.log('aquiiiii'+keyEdit);
 
-        if (newObjectToPost != undefined){
-            const linkEdit = `https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idEdit}`
-            let objEdit = {headers: {'Secret-Key': keyEdit }};
+        if (oldObjectToPost != undefined){
+            const linkDelete = `https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idEdit}`
+            let objDelete = {headers: {'Secret-Key': keyEdit }};
             const conf = confirm("Tem certeza que deseja editar este Quiz?");
+            let ownDatasNew = [];
+            for (let i=0; i<ownDatas.length; i++){
+                console.log(keyEdit);
+                if (idEdit == ownDatas[i].id){
+                    keyEdit = ownDatas[i].key;
+                } else{
+                    ownDatasNew.push(ownDatas[i]);
+                }
+            }
             if (conf){
-                const promise = axios.put(linkEdit, objectToPost, objEdit);
-                promise.then(window.location.reload());
+                const promise = axios.delete(linkDelete, objDelete);
+                promise.then(element => {
+                    localStorage.setItem("dataRecived", JSON.stringify(ownDatasNew)); 
+                    console.log('objeto')
+                    console.log(objectToPost);
+                    send(objectToPost);  
+                }
+                );
                 promise.catch(error);
+
+
             }
         }else{ 
-            let datasToSend;
-            let promisePost = axios.post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes",objectToPost);
-            promisePost.then(element => {
-                console.log('deu bom');
-                listSendStorage.id = element.data.id;
-                listSendStorage.key = element.data.key;
-                if (localStorage.getItem("dataRecived") != null){
-                    let teste = JSON.parse(localStorage.getItem("dataRecived"));
-                    teste.push(listSendStorage);
-                    datasToSend = JSON.stringify(teste);
-                    localStorage.setItem("dataRecived", datasToSend);
-                } else{
-                    datasToSend = JSON.stringify([listSendStorage]);
-                    localStorage.setItem("dataRecived", datasToSend);
-                }
-                dad.innerHTML = '';
-                dad.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
-                dad.innerHTML += `<div class="caseQuizz3" data-test="success-banner" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
-                                    <span>${titleQuizz.value}</span>
-                                </div>`;
-                dad.innerHTML += '<button class="buttonEnd" onclick="playQuizz(this)" data-test="go-quiz">Acessar Quizz</button>'
-                dad.innerHTML += '<button class="backHome" onclick="backTo()" data-test="go-home">Voltar pra home</>'
-            });
-            promisePost.catch(alert);
-            }
-    }
-    else{
+            send(objectToPost);
+        }
+    } else{
         alert(`Dados incorretos, verique se:
         - Título do nível tem no mínimo 10 caracteres.
         - % de acerto mínima é um número entre 0 e 100.
@@ -601,3 +598,30 @@ function finalQuizz(div){
 function backTo(){
     window.location.reload();
 }
+
+function send(obj){
+    let datasToSend;
+    let promisePost = axios.post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes",obj);
+    promisePost.then(element => {
+        console.log('deu bom');
+        listSendStorage.id = element.data.id;
+        listSendStorage.key = element.data.key;
+        if (localStorage.getItem("dataRecived") != null){
+            let teste = JSON.parse(localStorage.getItem("dataRecived"));
+            teste.push(listSendStorage);
+            datasToSend = JSON.stringify(teste);
+            localStorage.setItem("dataRecived", datasToSend);
+        } else{
+            datasToSend = JSON.stringify([listSendStorage]);
+            localStorage.setItem("dataRecived", datasToSend);
+        }
+        daD.innerHTML = '';
+        daD.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
+        daD.innerHTML += `<div class="caseQuizz3" data-test="success-banner" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
+                            <span>${titleQuizz.value}</span>
+                        </div>`;
+        daD.innerHTML += '<button class="buttonEnd" onclick="playQuizz(this)" data-test="go-quiz">Acessar Quizz</button>'
+        daD.innerHTML += '<button class="backHome" onclick="backTo()" data-test="go-home">Voltar pra home</>'
+    });
+    promisePost.catch(error);
+    }
