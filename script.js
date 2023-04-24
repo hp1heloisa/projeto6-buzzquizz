@@ -2,8 +2,8 @@ axios.defaults.headers.common['Authorization'] = 'vCvQhdKuWXtO3cwYJuvsXTZs';
 let promiseQuizzes = axios.get("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes");
 promiseQuizzes.then(renderQuizzes);
 promiseQuizzes.catch(alert);
-
-
+setTimeout(removeLoading,1000);
+setTimeout(addScreen1,1000);
 
 function addScreen1() {
     const screen1 = document.querySelector('.screen1');
@@ -590,44 +590,12 @@ function backTo(){
     window.location.reload();
 }
 
-function loading3To2(){
-    const loading = document.querySelector('.loading-page');
-    loading.classList.add('hidden');
-
-    const screen2= document.querySelector('.screen2');
-    screen2.classList.remove('hidden');
-}
-
-function changeScreen3To1(){
-    const screen3 = document.querySelector('.screen3');
-    screen3.classList.add('hidden');
-
-    const loading = document.querySelector('.loading-page');
-    loading.classList.remove('hidden');
-
-    setTimeout(loading3To2,1000);
-
-}
-
-function goQuizz(id){
-    console.log(idToGo);
-
-    changeScreen3To1();
-
-    const promise = axios.get(`https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idToGo}`);
-    promise.then(renderSelectedQuiz);
-    promise.catch(error);
-}
-
-let idToGo;
-
 function send(obj){
     let datasToSend;
     let promisePost = axios.post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes",obj);
     promisePost.then(element => {
         console.log('deu bom');
         listSendStorage.id = element.data.id;
-        idToGo = element.data.id;
         listSendStorage.key = element.data.key;
         if (localStorage.getItem("dataRecived") != null){
             let teste = JSON.parse(localStorage.getItem("dataRecived"));
