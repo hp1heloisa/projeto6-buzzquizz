@@ -247,6 +247,7 @@ ion-icon:hover{
     display:flex;
     flex-direction:column;
     justify-content:space-between;
+    word-break: break-all;
 }
 
 .answer img {
