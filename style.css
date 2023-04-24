@@ -69,6 +69,7 @@ ion-icon:hover{
     text-align: center;
     margin-top: 20px;
     padding: 5px;
+    background: none;
 }
 .yourQuizzes{
     width: 84%;
@@ -427,6 +428,7 @@ input::placeholder{
     align-items: center;
     justify-content: center;
     color: #FFF5F4;
+    border: none;
 }
 .button3:hover{
     cursor: pointer;
@@ -509,6 +511,8 @@ input::placeholder{
     line-height: 25px;
     color: #818181;
     margin-top: 22px;
+    background: none;
+    border: none;
 }
 .backHome:hover{
     cursor: pointer;
@@ -525,6 +529,7 @@ input::placeholder{
     align-items: center;
     justify-content: center;
     color: #FFF5F4;
+    border: none;
 }
 .buttonEnd:hover{
     cursor: pointer;

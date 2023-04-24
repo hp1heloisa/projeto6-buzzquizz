@@ -25,7 +25,7 @@ function renderQuizzes(list){
     if (ownDatas == null){
             your.classList.add('divCreate');
             your.innerHTML += '<div class="textYour">Você não criou nenhum quizz ainda :(</div>';
-            your.innerHTML += '<div class="create" onclick="createQuizz()" data-test="create-btn">Criar Quizz</div>';
+            your.innerHTML += '<button class="create" onclick="createQuizz()" data-test="create-btn">Criar Quizz</button>';
             list.data.forEach(element => {
                 all.innerHTML += `<div class="caseQuizz" onclick="playQuizz(this)" data-test="others-quiz">
                                     <div class="imgCase" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${element.image}); background-position: center; background-size:100%;">
@@ -60,7 +60,7 @@ function renderQuizzes(list){
                 your.classList.add('divCreate');
                 your.innerHTML = '';
                 your.innerHTML += '<div class="textYour">Você não criou nenhum quizz ainda :(</div>';
-                your.innerHTML += '<div class="create" onclick="createQuizz()" data-test="create-btn">Criar Quizz</div>';
+                your.innerHTML += '<button class="create" onclick="createQuizz()" data-test="create-btn">Criar Quizz</button>';
             };
         }
 }
@@ -330,7 +330,7 @@ function nextQuestion(div){
         dad.innerHTML = '';
         dad.innerHTML += '<div class="titleThird">Crie suas perguntas</div>';
         dad.innerHTML += '<div class ="createDivs"></div>';
-        dad.innerHTML += '<div class="button3" onclick="finalQuest(this)" data-test="go-create-levels">Prosseguir pra criar níveis</div>'
+        dad.innerHTML += '<button class="button3" onclick="finalQuest(this)" data-test="go-create-levels">Prosseguir pra criar níveis</button>'
         for (let i=0;i<numberQuestions.value;i++){
             dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate" data-test="question-ctn">
                                                                 <div class="screen3-1" onclick="each(this)"><span>Pergunta ${i+1}</span><ion-icon name="create-outline" onclick="each(this)" data-test="toggle"></ion-icon></div>
@@ -493,7 +493,7 @@ function finalQuest(div){
         dad.innerHTML = '';
         dad.innerHTML += '<div class="titleThird">Agora, decida os níveis</div>';
         dad.innerHTML += '<div class ="createDivs"></div>';
-        dad.innerHTML += '<div class="button3" onclick="finalQuizz(this)" data-test="finish">Finalizar Quizz</div>'
+        dad.innerHTML += '<button class="button3" onclick="finalQuizz(this)" data-test="finish">Finalizar Quizz</button>'
         for (let i=0;i<level.value;i++){
             dad.querySelector('.createDivs').innerHTML += `<div class = "eachCreate" data-test="level-ctn">
                                                                 <div class="screen3-1" onclick="each(this)"><span>Nível ${i+1}</span><ion-icon name="create-outline" onclick="each(this)" data-test="toggle"></ion-icon></div>
@@ -583,8 +583,8 @@ function finalQuizz(div){
                 dad.innerHTML += `<div class="caseQuizz3" data-test="success-banner" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
                                     <span>${titleQuizz.value}</span>
                                 </div>`;
-                dad.innerHTML += '<div class="buttonEnd" onclick="playQuizz(this)" data-test="go-quiz">Acessar Quizz</div>'
-                dad.innerHTML += '<div class="backHome" onclick="backTo()" data-test="go-home">Voltar pra home</div>'
+                dad.innerHTML += '<button class="buttonEnd" onclick="playQuizz(this)" data-test="go-quiz">Acessar Quizz</button>'
+                dad.innerHTML += '<button class="backHome" onclick="backTo()" data-test="go-home">Voltar pra home</>'
             });
             promisePost.catch(alert);
             }
