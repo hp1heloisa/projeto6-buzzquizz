@@ -549,30 +549,22 @@ function finalQuizz(div){
         console.log('aquiiiii'+keyEdit);
 
         if (oldObjectToPost != undefined){
-            const linkDelete = `https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idEdit}`
-            let objDelete = {headers: {'Secret-Key': keyEdit }};
+            const linkEdit = `https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idEdit}`
+            let objEdit = {headers: {'Secret-Key': keyEdit }};
             const conf = confirm("Tem certeza que deseja editar este Quiz?");
-            let ownDatasNew = [];
-            for (let i=0; i<ownDatas.length; i++){
-                console.log(keyEdit);
-                if (idEdit == ownDatas[i].id){
-                    keyEdit = ownDatas[i].key;
-                } else{
-                    ownDatasNew.push(ownDatas[i]);
-                }
-            }
             if (conf){
-                const promise = axios.delete(linkDelete, objDelete);
+                const promise = axios.put(linkEdit,objectToPost, objEdit);
                 promise.then(element => {
-                    localStorage.setItem("dataRecived", JSON.stringify(ownDatasNew)); 
-                    console.log('objeto')
-                    console.log(objectToPost);
-                    send(objectToPost);  
-                }
-                );
+                    daD.innerHTML = '';
+                    daD.innerHTML += '<div class="titleThird">Seu quizz está pronto!</div>';
+                    daD.innerHTML += `<div class="caseQuizz3" data-test="success-banner">
+                                        <div class="backImg3"><span>${titleQuizz.value}</span><span class="hidden idImagem">${element.id}</span></div>
+                                        <img class="imgCase" src="${urlCaseQuizz.value}">
+                                    </div>`;
+                    daD.innerHTML += `<button class="buttonEnd" onclick="playQuizz(this)" data-test="go-quiz">Acessar Quizz <span class="hidden idImagem">${element.data.id}</span></button>`
+                    daD.innerHTML += '<button class="backHome" onclick="backTo()" data-test="go-home">Voltar pra home</>'
+                });
                 promise.catch(error);
-
-
             }
         }else{ 
             send(objectToPost);
