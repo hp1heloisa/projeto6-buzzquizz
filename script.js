@@ -596,12 +596,44 @@ function backTo(){
     window.location.reload();
 }
 
+function loading3To2(){
+    const loading = document.querySelector('.loading-page');
+    loading.classList.add('hidden');
+
+    const screen2= document.querySelector('.screen2');
+    screen2.classList.remove('hidden');
+}
+
+function changeScreen3To1(){
+    const screen3 = document.querySelector('.screen3');
+    screen3.classList.add('hidden');
+
+    const loading = document.querySelector('.loading-page');
+    loading.classList.remove('hidden');
+
+    setTimeout(loading3To2,1000);
+
+}
+
+function goQuizz(id){
+    console.log(idToGo);
+
+    changeScreen3To1();
+
+    const promise = axios.get(`https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/${idToGo}`);
+    promise.then(renderSelectedQuiz);
+    promise.catch(error);
+}
+
+let idToGo;
+
 function send(obj){
     let datasToSend;
     let promisePost = axios.post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes",obj);
     promisePost.then(element => {
         console.log('deu bom');
         listSendStorage.id = element.data.id;
+        idToGo = element.data.id;
         listSendStorage.key = element.data.key;
         if (localStorage.getItem("dataRecived") != null){
             let teste = JSON.parse(localStorage.getItem("dataRecived"));
@@ -617,7 +649,7 @@ function send(obj){
         daD.innerHTML += `<div class="caseQuizz3" data-test="success-banner" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(${urlCaseQuizz.value}); background-position: center; background-size:100%;">
                             <span>${titleQuizz.value}</span>
                         </div>`;
-        daD.innerHTML += '<button class="buttonEnd" onclick="playQuizz(this)" data-test="go-quiz">Acessar Quizz</button>'
+        daD.innerHTML += `<button class="buttonEnd" onclick="goQuizz(${idToGo})" data-test="go-quiz">Acessar Quizz</button>`
         daD.innerHTML += '<button class="backHome" onclick="backTo()" data-test="go-home">Voltar pra home</>'
     });
     promisePost.catch(error);
