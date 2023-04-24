@@ -363,23 +363,20 @@ function nextQuestion(div){
                                                                     </div>
                                                                 </div>
                                                         </div>`;
-            if (oldObjectToPost != undefined){
-                let listB1 = dad.querySelectorAll('.b1');
-                console.log(listB1[i].querySelector('.b1 :nth-child(1)').value)
-                console.log(oldObjectToPost.questions[i].title)
-                for (let k=0; k<listB1.length;k++){
-                    listB1[k].querySelector('.b1 :nth-child(1)').value = oldObjectToPost.questions[k].title;
-                    listB1[k].querySelector('.b1 :nth-child(2)').value = oldObjectToPost.questions[k].color;
-                }
-                for (let j=0; j<oldObjectToPost.questions[i].answers.length;j++){
+        }
+        if (oldObjectToPost != undefined){
+            let listB1 = dad.querySelectorAll('.b1');
+            for (let k=0; k<oldObjectToPost.questions.length;k++){
+                listB1[k].querySelector('.b1 :nth-child(1)').value = oldObjectToPost.questions[k].title;
+                listB1[k].querySelector('.b1 :nth-child(2)').value = oldObjectToPost.questions[k].color;
+                for (let j=0; j<oldObjectToPost.questions[k].answers.length;j++){
                     let listB = dad.querySelectorAll(`.b${j+2}`);
-                    for (let k=0; k<listB.length;k++){
-                        listB[k].querySelector(`.b${j+2} :nth-child(1)`).value = oldObjectToPost.questions[k].answers[j].text;
-                        listB[k].querySelector(`.b${j+2} :nth-child(2)`).value = oldObjectToPost.questions[k].answers[j].image;
+                    for (let m=0;m<oldObjectToPost.questions[k].answers.length;m++){
+                        listB[k].querySelector(`.b${j+2} :nth-child(1)`).value = oldObjectToPost.questions[k].answers[m].text;
+                        listB[k].querySelector(`.b${j+2} :nth-child(2)`).value = oldObjectToPost.questions[k].answers[m].image;
                     }
                 }
             }
-
         }
         console.log(oldObjectToPost);
 
