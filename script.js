@@ -507,14 +507,14 @@ function finalQuest(div){
                                                                     </div>                                         
                                                                 </div>
                                                             </div>`;
-            if (oldObjectToPost != undefined){
-                let block = dad.querySelectorAll('.blockInputs');
-                for (let j=0; j<block.length; j++){
-                    block[j].querySelector('.blockInputs :nth-child(1)').value = oldObjectToPost.levels[j].title;
-                    block[j].querySelector('.blockInputs :nth-child(2)').value = oldObjectToPost.levels[j].minValue;
-                    block[j].querySelector('.blockInputs :nth-child(3)').value = oldObjectToPost.levels[j].image;
-                    block[j].querySelector('.blockInputs :nth-child(4)').value = oldObjectToPost.levels[j].text;
-                }
+        }
+        if (oldObjectToPost != undefined){
+            let block = dad.querySelectorAll('.blockInputs');
+            for (let j=0; j<oldObjectToPost.levels.length; j++){
+                block[j].querySelector('.blockInputs :nth-child(1)').value = oldObjectToPost.levels[j].title;
+                block[j].querySelector('.blockInputs :nth-child(2)').value = oldObjectToPost.levels[j].minValue;
+                block[j].querySelector('.blockInputs :nth-child(3)').value = oldObjectToPost.levels[j].image;
+                block[j].querySelector('.blockInputs :nth-child(4)').value = oldObjectToPost.levels[j].text;
             }
         }
     }
